@@ -21,4 +21,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+//Route::get('/home', 'HomeController@index');
+Route::get('home',['uses'=>'HomeController@index', 'as' => 'dt']);
+Route::get('home/{data}',['uses'=>'HomeController@getData', 'as' => 'dt.data']);

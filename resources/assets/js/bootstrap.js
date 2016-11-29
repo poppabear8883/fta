@@ -8,6 +8,9 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
+var dt = require('datatables.net')(window, $);
+var buttons = require( 'datatables.net-buttons' )(window, $);
+
 require('bootstrap-sass');
 
 /**

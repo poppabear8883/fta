@@ -83,5 +83,8 @@
 
     <!-- Scripts -->
     <script src="/js/app.js"></script>
+    <!-- App scripts -->
+    @stack('scripts')
+
 </body>
 </html>
