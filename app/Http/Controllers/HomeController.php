@@ -41,9 +41,9 @@ class HomeController extends Controller
      */
     public function getData()
     {
-        $users = Bid::select(['url', 'won', 'datetime', 'name', 'location', 'cur_bid', 'max_bid'])
+        $bids = Bid::select(['url', 'datetime', 'name', 'location', 'cur_bid', 'max_bid'])
             ->where('user_id', \Auth::user()->id)
             ->get();
-        return Datatables::of($users)->make();
+        return Datatables::of($bids)->make();
     }
 }

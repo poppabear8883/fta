@@ -1,12 +1,13 @@
 
 // Fonts
-@import url(https://fonts.googleapis.com/css?family=Cinzel);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 // Variables
 @import "variables";
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+//@import "node_modules/datatables.net-dt/css/jquery.dataTables";
 @import "node_modules/datatables.net-bs/css/dataTables.bootstrap";
 @import "node_modules/datatables.net-buttons-bs/css/buttons.bootstrap";
 
@@ -14,6 +15,16 @@ html {
   font-family: $font-family-sans-serif;
 }
 
-.tablerow-won {
+.tablerow-success {
   background-color: #39ffb0 !important;
 }
+
+.tablerow-caution {
+  background-color: #ffea95 !important;
+}
+
+.tablerow-danger {
+  background-color: #ff8b8b !important;
+}
+
+

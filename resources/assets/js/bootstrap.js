@@ -14,10 +14,15 @@ require('bootstrap-sass');
 /**
  * Loading in DataTables and extensions
  */
-var dt = require('datatables.net')(window, $);
-var buttons = require( 'datatables.net-buttons' )(window, $);
-require( 'datatables.net-buttons/js/buttons.html5.js' )();
-require( 'datatables.net-buttons/js/buttons.print.js' )();
+window.dt = require('datatables.net')(window, $);
+require('datatables.net-bs/js/dataTables.bootstrap')(window, $);
+
+window.buttons = require('datatables.net-buttons')(window, $);
+require( 'datatables.net-buttons-bs/js/buttons.bootstrap.js' )(window, $);
+require( 'datatables.net-buttons/js/buttons.colVis.js' )(window, $);
+require( 'datatables.net-buttons/js/buttons.html5.js' )(window, $);
+require( 'datatables.net-buttons/js/buttons.flash.js' )(window, $);
+require( 'datatables.net-buttons/js/buttons.print.js' )(window, $);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

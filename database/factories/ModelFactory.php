@@ -25,23 +25,10 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Bid::class, function (Faker\Generator $faker) {
-    /**
-    $table->increments('id');
-    $table->integer('user_id');
-    $table->string('name');
-    $table->dateTime('datetime');
-    $table->string('location');
-    $table->string('description');
-    $table->decimal('cur_bid');
-    $table->decimal('max_bid');
-    $table->integer('won')->default(0);
-    $table->string('pickup')->default('');
-    $table->string('url');
-     */
     return [
-        'user_id'   => $faker->numberBetween(1, 100),
+        'user_id'   => $faker->numberBetween(1, 5),
         'name'      => $faker->firstName . ' ' . $faker->lastName,
-        'datetime'  => $faker->dateTime,
+        'datetime'  => $faker->dateTimeBetween('-5 days', '+5 days')->format('m/d/Y, h:i'),
         'location'  => $faker->streetAddress,
         'description' => $faker->sentence(),
         'cur_bid' => $faker->randomFloat(1,0,1000),

@@ -32,16 +32,17 @@
                     <div class="panel-heading">
                         My Bids
                         <div class="pull-right">
-                            <div class="btn btn-xs btn-success"><i class="glyphicon glyphicon-plus"></i></div>
+                            <a href="#" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-plus"></i></a>
                         </div>
                     </div>
 
                     <div class="panel-body">
+                        <div id="button_tools" style="margin-bottom: 15px"></div>
+
                         <table class="table table-striped table-bordered dataTable no-footer" id="users-table">
                             <thead>
                             <tr>
                                 <th>url</th>
-                                <th>won</th>
                                 <th>Ending Date</th>
                                 <th>Name</th>
                                 <th>Location</th>
@@ -61,25 +62,40 @@
 @push('scripts')
 <script>
     $(function() {
-        $('#users-table').DataTable({
+        var table = $('#users-table').DataTable({
+            dom: 'Blfrtip',
+            buttons: {
+                buttons: [
+                    { extend: 'copy', className: 'btn-sm' },
+                    { extend: 'excel', className: 'btn-sm' },
+                    { extend: 'pdf', className: 'btn-sm' },
+                    { extend: 'print', className: 'btn-sm btn-primary' }
+                ]
+            },
             processing: true,
             serverSide: true,
             ajax: '{!! url('home/data') !!}',
             "rowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-                if(aData[1] == '1') {
-                    $(nRow).addClass('tablerow-won');
+                var currentdate = new Date().toLocaleString();
+                var ONE_HOUR = 60 * 60 * 1000;
+                if((currentdate - aData[1]) < ONE_HOUR) {
+                    $(nRow).addClass('tablerow-caution');
+                }
+
+                if ( Date.parse ( aData[1] ) < Date.parse ( currentdate ) ) {
+                    $(nRow).addClass('tablerow-danger');
                 }
             },
             "columnDefs": [
                 {
-                    "targets": 3,
+                    "targets": 2,
                     "render": function ( data, type, row, meta ) {
                         var itemUrl = row[0];
                         return '<a href="' + itemUrl + '">' + data + '</a>';
                     }
                 },
                 {
-                    "targets": 7,
+                    "targets": 6,
                     "render": function( data, type, row, meta) {
                         return '<div class="text-center"><a href="#" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-check"></i></a> ' +
                                 '<a href="#" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a> ' +
@@ -88,8 +104,6 @@
                 }
             ],
             "columns": [{
-                "visible": false
-            },{
                 "visible": false
             },{
                 "visible": true
@@ -103,6 +117,9 @@
                 "visible": true
             }]
         });
+
+        table.buttons().container()
+                .appendTo('#button_tools');
     });
 </script>
 @endpush

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@import url(https://fonts.googleapis.com/css?family=Cinzel);
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -1377,7 +1377,7 @@ html {
 }
 
 body {
-  font-family: "Cinzel", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 16px;
   line-height: 1.6;
   color: #636b6f;
@@ -6867,7 +6867,7 @@ button.close {
   position: absolute;
   z-index: 1070;
   display: block;
-  font-family: "Cinzel", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -7001,7 +7001,7 @@ button.close {
   display: none;
   max-width: 276px;
   padding: 1px;
-  font-family: "Cinzel", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: normal;
   letter-spacing: normal;
@@ -8013,11 +8013,19 @@ div.dt-button-background {
 }
 
 html {
-  font-family: "Cinzel", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
-.tablerow-won {
+.tablerow-success {
   background-color: #39ffb0 !important;
+}
+
+.tablerow-caution {
+  background-color: #ffea95 !important;
+}
+
+.tablerow-danger {
+  background-color: #ff8b8b !important;
 }
 
 /*# sourceMappingURL=app.css.map */
