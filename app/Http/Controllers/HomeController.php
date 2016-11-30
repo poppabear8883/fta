@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
 use App\User;
+use App\Bid;
+
 
 class HomeController extends Controller
 {
@@ -25,7 +27,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $won = Bid::where([
+            ['user_id', '=', \Auth::user()->id],
+            ['won', '=', '1']
+        ])->get();
+        return view('home',['won' => $won]);
     }
 
     /**
@@ -35,7 +41,9 @@ class HomeController extends Controller
      */
     public function getData()
     {
-        $users = User::select(['id', 'name', 'email', 'created_at', 'updated_at'])->get();
+        $users = Bid::select(['url', 'won', 'datetime', 'name', 'location', 'cur_bid', 'max_bid'])
+            ->where('user_id', \Auth::user()->id)
+            ->get();
         return Datatables::of($users)->make();
     }
 }
