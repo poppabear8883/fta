@@ -1,0 +1,10 @@
+Think about using VueJS 2.0 ??
+
+todo: Remove Item Button
+todo: Won Item Button
+todo: New Item Form
+todo: Edit Item Form
+todo: Won Item Datatable
+todo: Statistics
+todo: Email notifications
+todo: SMS Notifications

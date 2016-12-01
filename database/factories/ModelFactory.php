@@ -28,7 +28,7 @@ $factory->define(App\Bid::class, function (Faker\Generator $faker) {
     return [
         'user_id'   => $faker->numberBetween(1, 5),
         'name'      => $faker->firstName . ' ' . $faker->lastName,
-        'datetime'  => $faker->dateTimeBetween('-1 days', '+2 days'),
+        'datetime'  => $faker->dateTimeBetween('-1 days', '+1 days'),
         'location'  => $faker->streetAddress,
         'description' => $faker->sentence(),
         'cur_bid' => $faker->randomFloat(1,0,1000),

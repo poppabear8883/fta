@@ -78,17 +78,21 @@
             "order": [[1, "asc"]],
             "iDisplayLength": 25,
             "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                var now = new moment();
-                var data = new moment(aData[1]);
-                var dif = data.diff(now, 'hours');
+                setInterval(function () {
+                    var now = new moment();
+                    var data = new moment(aData[1]);
+                    var dif = data.diff(now, 'hours');
 
-                if (dif <= 1) {
-                    $(nRow).addClass('tablerow-caution');
-                }
+                    if (dif == 0) {
+                        $(nRow).removeClass();
+                        $(nRow).addClass('tablerow-caution');
+                    }
 
-                if (data < now) {
-                    $(nRow).addClass('tablerow-danger');
-                }
+                    if (data < now) {
+                        $(nRow).removeClass();
+                        $(nRow).addClass('tablerow-danger');
+                    }
+                }, 1000);
             },
             "columnDefs": [
                 {
