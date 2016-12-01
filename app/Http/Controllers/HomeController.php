@@ -27,6 +27,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(\Auth::guest()) {
+            return view('welcome');
+        }
+
         $won = Bid::where([
             ['user_id', '=', \Auth::user()->id],
             ['won', '=', '1']
@@ -42,7 +46,10 @@ class HomeController extends Controller
     public function getData()
     {
         $bids = Bid::select(['url', 'datetime', 'name', 'location', 'cur_bid', 'max_bid'])
-            ->where('user_id', \Auth::user()->id)
+            ->where([
+                ['user_id', '=', \Auth::user()->id],
+                ['won', '=', 0]
+            ])
             ->get();
         return Datatables::of($bids)->make();
     }

@@ -11,13 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    if(Auth::guest()) {
-        return view('welcome');
-    }
-
-    return view('home');
-});
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
