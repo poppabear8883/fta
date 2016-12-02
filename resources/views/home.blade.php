@@ -39,9 +39,10 @@
                     <div class="panel-body">
                         <div id="button_tools" style="margin-bottom: 15px"></div>
 
-                        <table class="table table-striped table-bordered dataTable no-footer" id="users-table">
+                        <table class="table table-striped table-bordered dataTable no-footer" id="bids-table">
                             <thead>
                             <tr>
+                                <th></th>
                                 <th>url</th>
                                 <th>Ends</th>
                                 <th>Name</th>
@@ -61,8 +62,28 @@
 
 @push('scripts')
 <script>
-    $(function () {
-        var table = $('#users-table').DataTable({
+    function format(d) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Name:</td>' +
+                '<td>' + d.name + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Link:</td>' +
+                '<td>' + d.url + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Extra info:</td>' +
+                '<td>And any further details here (images etc)...</td>' +
+                '</tr>' +
+                '</table>';
+    }
+
+    $(document).ready(function () {
+        var sel_table = $('#bids-table');
+
+        var table = sel_table.DataTable({
             dom: 'Blfrtip',
             buttons: {
                 buttons: [
@@ -75,41 +96,43 @@
             processing: true,
             serverSide: true,
             ajax: '{!! url('home/data') !!}',
-            "order": [[1, "asc"]],
+            "order": [[2, "asc"]],
             "iDisplayLength": 25,
             "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 setInterval(function () {
                     var now = new moment();
-                    var data = new moment(aData[1]);
+                    var data = new moment(aData['datetime']);
                     var dif = data.diff(now, 'hours');
 
                     if (dif == 0) {
-                        $(nRow).removeClass();
+                        $(nRow).removeClass('tablerow-danger');
                         $(nRow).addClass('tablerow-caution');
                     }
 
                     if (data < now) {
-                        $(nRow).removeClass();
+                        $(nRow).removeClass('tablerow-caution');
                         $(nRow).addClass('tablerow-danger');
                     }
                 }, 1000);
             },
             "columnDefs": [
                 {
-                    "targets": 1,
+                    "targets": 2,
                     "render": function (data, type, row, meta) {
                         return new moment(data).format('lll');
                     }
                 },
                 {
-                    "targets": 2,
+                    "targets": 3,
                     "render": function (data, type, row, meta) {
-                        var itemUrl = row[0];
+
+                        var itemUrl = row['url'];
+
                         return '<a href="' + itemUrl + '">' + data + '</a>';
                     }
                 },
                 {
-                    "targets": 6,
+                    "targets": 7,
                     "render": function (data, type, row, meta) {
                         return '<div class="text-center"><a href="#" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-check"></i></a> ' +
                                 '<a href="#" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i></a> ' +
@@ -118,22 +141,48 @@
                 }
             ],
             "columns": [{
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            }, {
+                "data": "url",
                 "visible": false
             }, {
-                "visible": true
+                "data": "datetime"
             }, {
-                "visible": true
+                "data": "name"
             }, {
-                "visible": true
+                "data": "location"
             }, {
-                "visible": true
+                "data": "cur_bid"
             }, {
-                "visible": true
+                "data": "max_bid"
+
             }]
         });
 
         table.buttons().container()
                 .appendTo('#button_tools');
+
+        // Add event listener for opening and closing details
+        sel_table.find('tbody').on('click', 'td.details-control', function () {
+            console.log('clicked');
+
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
     });
 </script>
 @endpush

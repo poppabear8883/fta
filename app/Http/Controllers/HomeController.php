@@ -31,6 +31,14 @@ class HomeController extends Controller
             return view('welcome');
         }
 
+//        $bids = Bid::select(['url', 'datetime', 'name', 'location', 'cur_bid', 'max_bid'])
+//            ->where([
+//                ['user_id', '=', \Auth::user()->id],
+//                ['won', '=', 0]
+//            ])
+//            ->get();
+//        dd(Datatables::of($bids)->make(true));
+
         $won = Bid::where([
             ['user_id', '=', \Auth::user()->id],
             ['won', '=', '1']
@@ -51,6 +59,6 @@ class HomeController extends Controller
                 ['won', '=', 0]
             ])
             ->get();
-        return Datatables::of($bids)->make();
+        return Datatables::of($bids)->make(true);
     }
 }
