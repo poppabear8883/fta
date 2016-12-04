@@ -54,9 +54,17 @@ class BidController extends Controller
             'cur_bid' => 'required'
         ]);
 
-        $input = $request->all();
-
-        Bid::create($input);
+        Bid::create([
+            'user_id' => \Auth::user()->id,
+            'name' => $request->get('name'),
+            'url' => $request->get('url'),
+            'datetime' => $request->get('datetime'),
+            'location' => $request->get('location'),
+            'pickup' => $request->get('pickup'),
+            'notes' => $request->get('notes'),
+            'cur_bid' => $request->get('cur_bid'),
+            'max_bid' => $request->get('max_bid')
+        ]);
 
         \Session::flash('flash_message', 'Bid successfully added!');
 
