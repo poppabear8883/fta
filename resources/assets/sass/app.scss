@@ -7,12 +7,21 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
-//@import "node_modules/datatables.net-dt/css/jquery.dataTables";
+
+// jQuery
+@import "node_modules/jquery-datetimepicker/jquery.datetimepicker";
+//@import "node_Modules/jquery-confirm/css/jquery-confirm";
+
+// DataTables
 @import "node_modules/datatables.net-bs/css/dataTables.bootstrap";
 @import "node_modules/datatables.net-buttons-bs/css/buttons.bootstrap";
 
 html {
   font-family: $font-family-sans-serif;
+}
+
+.padding-top70 {
+  padding-top: 70px;
 }
 
 .tablerow-success {

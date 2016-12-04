@@ -13,6 +13,13 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 /**
+ * jQuery Plugins
+ */
+require('jquery-datetimepicker');
+require('jquery-maskmoney/src/jquery.maskMoney.js');
+//require('jquery-confirm/js/jquery-confirm.js');
+
+/**
  * Loading in DataTables and extensions
  */
 window.dt = require('datatables.net')(window, $);

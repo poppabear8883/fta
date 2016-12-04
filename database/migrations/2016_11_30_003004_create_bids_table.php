@@ -19,11 +19,11 @@ class CreateBidsTable extends Migration
             $table->string('name');
             $table->string('datetime');
             $table->string('location');
-            $table->string('description');
+            $table->string('pickup');
+            $table->string('notes');
             $table->decimal('cur_bid');
-            $table->decimal('max_bid');
+            $table->decimal('max_bid')->default(0.00);
             $table->integer('won')->default(0);
-            $table->string('pickup')->default('');
             $table->string('url');
             $table->timestamps();
         });
