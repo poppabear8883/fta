@@ -21,6 +21,9 @@ Route::get('home/{data}',['uses'=>'HomeController@getData', 'as' => 'dt.data']);
 Route::get('won',['uses'=>'WonController@index', 'as' => 'wdt']);
 Route::get('won/{data}',['uses'=>'WonController@getData', 'as' => 'wdt.data']);
 
+Route::get('profile', 'ProfileController@index');
+Route::patch('profile/{id}', ['uses' => 'ProfileController@update', 'as' => 'profile.update']);
+
 
 Route::patch('bid/{id}/won', 'BidController@updateWon');
 
