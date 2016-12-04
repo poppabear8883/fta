@@ -42,7 +42,7 @@
                     <div class="panel-body">
                         <div id="button_tools" style="margin-bottom: 15px"></div>
 
-                        <table class="table table-striped table-bordered dataTable no-footer" id="won-table">
+                        <table class="table table-striped dataTable no-footer" id="won-table">
                             <thead>
                             <tr>
                                 <th></th>
@@ -90,10 +90,34 @@
             dom: 'Blfrtip',
             buttons: {
                 buttons: [
-                    {extend: 'copy', className: 'btn-sm'},
-                    {extend: 'excel', className: 'btn-sm'},
-                    {extend: 'pdf', className: 'btn-sm'},
-                    {extend: 'print', className: 'btn-sm btn-primary'}
+                    {
+                        extend: 'copy',
+                        className: 'btn-sm'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn-sm'
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn-sm btn-primary',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        customize: function (win) {
+                            $(win.document.body)
+                                    .css('font-size', '10pt');
+
+
+                            $(win.document.body).find('table')
+                                    .addClass('compact')
+                                    .css('font-size', 'inherit');
+                        }
+                    }
                 ]
             },
             processing: true,
