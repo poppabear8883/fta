@@ -135,7 +135,7 @@
                         $(nRow).removeClass('tablerow-caution');
                         $(nRow).addClass('tablerow-danger');
                         $(nRow).find('#btnWon' + aData['id']).removeClass('hide');
-                        $(nRow).find('#btnEdit' + aData['id']).addClass('hide');
+                        //$(nRow).find('#btnEdit' + aData['id']).addClass('hide');
                     }
                 }, 1000);
             },
