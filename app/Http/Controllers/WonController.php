@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use Yajra\Datatables\Datatables;
 use App\Bid;
 
+use App\Repositories\BidRepositoryInterface;
 
 class WonController extends Controller
 {
+    private $repo;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BidRepositoryInterface $repo)
     {
+        $this->repo = $repo;
         $this->middleware('auth');
     }
 
@@ -25,10 +29,7 @@ class WonController extends Controller
      */
     public function index()
     {
-        $active = Bid::where([
-            ['user_id', '=', \Auth::user()->id],
-            ['won', '=', '0']
-        ])->get();
+        $active = $this->repo->getActiveCount();
         return view('won',['active' => $active]);
     }
 
@@ -39,11 +40,6 @@ class WonController extends Controller
      */
     public function getData()
     {
-        $bids = Bid::where([
-                ['user_id', '=', \Auth::user()->id],
-                ['won', '=', 1]
-            ])
-            ->get();
-        return Datatables::of($bids)->make(true);
+        return $this->repo->getWonDataTable();
     }
 }

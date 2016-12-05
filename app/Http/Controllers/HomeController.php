@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Yajra\Datatables\Datatables;
-use App\Bid;
-
+use App\Repositories\BidRepositoryInterface;
 
 class HomeController extends Controller
 {
+
+    private $repo;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BidRepositoryInterface $repo)
     {
+        $this->repo = $repo;
         $this->middleware('auth')->except('index');
     }
 
@@ -29,25 +31,14 @@ class HomeController extends Controller
             return view('welcome');
         }
 
-        $won = Bid::where([
-            ['user_id', '=', \Auth::user()->id],
-            ['won', '=', '1']
-        ])->get();
-        $max_amount = 0;
+        $won = $this->repo->getWonCount();
 
-        $m_bids = Bid::select(['max_bid'])
-            ->where([
-                ['user_id', '=', \Auth::user()->id],
-                ['won', '=', '0']
-            ])->get();
+        $max_amount = $this->repo->getMaxBidsAmount();
 
-        //dd($cur_bids[0]->cur_bid);
-
-        foreach($m_bids as $b) {
-            $max_amount += $b->max_bid;
-        }
-
-        return view('home',['won' => $won, 'max_amount' => $max_amount]);
+        return view('home',[
+            'won' => $won,
+            'max_amount' => $max_amount
+        ]);
     }
 
     /**
@@ -57,11 +48,6 @@ class HomeController extends Controller
      */
     public function getData()
     {
-        $bids = Bid::where([
-                ['user_id', '=', \Auth::user()->id],
-                ['won', '=', 0]
-            ])
-            ->get();
-        return Datatables::of($bids)->make(true);
+        return $this->repo->getDataTable();
     }
 }
