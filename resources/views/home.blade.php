@@ -12,31 +12,28 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Statistics</div>
-
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-md-4">
-                            <h3>Budget:</h3>
+                        <div class="col-md-5">
+                            <h3>Max Bids vs Budget:</h3>
                             <div class="progress">
                                 <div id="budgetProgress" class="progress-bar progress-bar-info text-center" role="progressbar"
-                                     aria-valuenow="{{$max_amount}}"
+                                     aria-valuenow="{{$max_total}}"
                                      aria-valuemin="0"
                                      aria-valuemax="{{\Auth::user()->budget}}"
                                      style="width: 40%"
                                 >
-                                    ${{ $max_amount }} of ${{\Auth::user()->budget}}
+                                    ${{ $max_total }} out of ${{\Auth::user()->budget}}
                                 </div>
                             </div>
                             <a href="/profile">Change Budget</a>
                         </div>
-                        <div class="col-md-4">
-                            col 2
+                        <div class="col-md-2">
+
                         </div>
-                        <div class="col-md-4">
-                            <a href="/won" class="btn btn-success">
-                                Won Items <span class="badge">{{count($won)}}</span>
-                            </a>
+                        <div class="col-md-5 text-center">
+                            <h3>Current Bids Total:</h3>
+                            <h3>${{$cur_total}}</h3>
                         </div>
                     </div>
 
@@ -50,12 +47,22 @@
                 <div class="panel-heading">
                     My Bids
                     <div class="pull-right">
-                        <a href="bids/create" class="btn btn-xs btn-success"><i
-                                    class="glyphicon glyphicon-plus"></i></a>
+                        <a href="/won" class="btn btn-xs btn-info">
+                            Won Items <span class="badge">{{count($won)}}</span>
+                        </a>
                     </div>
                 </div>
 
                 <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="pull-right">
+                                <a href="bids/create" class="btn btn-xs btn-success"><i
+                                            class="glyphicon glyphicon-plus"></i> Add New Bid</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="button_tools" style="margin-bottom: 15px"></div>
 
                     <table class="table table-striped dataTable no-footer" id="bids-table">

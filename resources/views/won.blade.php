@@ -12,31 +12,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Statistics</div>
-
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                col 1
-                            </div>
-                            <div class="col-md-4">
-                                col 2
-                            </div>
-                            <div class="col-md-4">
-                                <a href="/home" class="btn btn-primary">
-                                    Active Bids <span class="badge">{{count($active)}}</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
                     <div class="panel-heading">
                         My Won Items
+                        <div class="pull-right">
+                            <a href="/home" class="btn btn-xs btn-primary">
+                                Active Bids <span class="badge">{{count($active)}}</span>
+                            </a>
+                        </div>
                     </div>
 
                     <div class="panel-body">
