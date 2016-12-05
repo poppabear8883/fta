@@ -17,7 +17,18 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">
-                            col 1
+                            <h3>Budget:</h3>
+                            <div class="progress">
+                                <div id="budgetProgress" class="progress-bar progress-bar-info text-center" role="progressbar"
+                                     aria-valuenow="{{$max_amount}}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="{{\Auth::user()->budget}}"
+                                     style="width: 40%"
+                                >
+                                    ${{ $max_amount }} of ${{\Auth::user()->budget}}
+                                </div>
+                            </div>
+                            <a href="/profile">Change Budget</a>
                         </div>
                         <div class="col-md-4">
                             col 2

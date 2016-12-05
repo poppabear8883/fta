@@ -33,7 +33,21 @@ class HomeController extends Controller
             ['user_id', '=', \Auth::user()->id],
             ['won', '=', '1']
         ])->get();
-        return view('home',['won' => $won]);
+        $max_amount = 0;
+
+        $m_bids = Bid::select(['max_bid'])
+            ->where([
+                ['user_id', '=', \Auth::user()->id],
+                ['won', '=', '0']
+            ])->get();
+
+        //dd($cur_bids[0]->cur_bid);
+
+        foreach($m_bids as $b) {
+            $max_amount += $b->max_bid;
+        }
+
+        return view('home',['won' => $won, 'max_amount' => $max_amount]);
     }
 
     /**
