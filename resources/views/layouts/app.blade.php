@@ -81,6 +81,11 @@
         </nav>
 
         <div class="container padding-top70">
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    <h1>Beta v1.0</h1>
+                </div>
+            </div>
             @yield('content')
         </div>
     </div>
