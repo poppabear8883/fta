@@ -1,3 +1,0 @@
-todo: Statistics
-todo: Email notifications
-todo: SMS Notifications
