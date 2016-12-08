@@ -11,6 +11,8 @@
 |
 */
 
+use App\Mail\WelcomeToBidFtaApp;
+
 Route::get('/', 'HomeController@index');
 
 Auth::routes();
@@ -28,3 +30,8 @@ Route::patch('profile/{id}', ['uses' => 'ProfileController@update', 'as' => 'pro
 Route::patch('bid/{id}/won', 'BidController@updateWon');
 
 Route::resource('bids', 'BidController');
+
+
+Route::get('/notify/email/welcome', function() {
+    Mail::to(\Auth::user()->email)->send(new WelcomeToBidFtaApp);
+});
