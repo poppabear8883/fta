@@ -41,12 +41,13 @@ class UserRegistered extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Welcome to BidFta App.')
+            ->subject('Welcome To Bidfta App!')
+                    ->line('Welcome to Bidfta App.')
                     ->line(
                         'This app is in active development and is in a Beta state!
                          If you experience any issues please email support@bidftaapp.com'
                     )
-                    ->line('Notice: This app is not affiliated with bidfta.com or Fast Track Auctions!')
+                    ->line('This app is not affiliated with bidfta.com or Fast Track Auctions!')
                     ->line('Thank you for using our app, we hope you find it useful!');
     }
 
