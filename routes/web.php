@@ -11,7 +11,7 @@
 |
 */
 
-use App\Mail\WelcomeToBidFtaApp;
+use App\Notifications\UserRegistered;
 
 Route::get('/', 'HomeController@index');
 
@@ -32,6 +32,7 @@ Route::patch('bid/{id}/won', 'BidController@updateWon');
 Route::resource('bids', 'BidController');
 
 
-Route::get('/notify/email/welcome', function() {
-    Mail::to(\Auth::user()->email)->send(new WelcomeToBidFtaApp);
+Route::get('/notify/welcome', function() {
+    \Auth::user()->notify(new UserRegistered());
+    return redirect()->back();
 });
