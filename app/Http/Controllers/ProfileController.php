@@ -24,7 +24,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = \Auth::user();
+        $user = auth()->user();
 
         return view('profile',['user' => $user]);
     }
@@ -40,10 +40,11 @@ class ProfileController extends Controller
         $user = User::findOrFail($id);
 
         $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required',
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
             'budget' => 'required',
-            'bidder_number' => 'required',
+            'bidder_number' => 'required|min:4|max:8|unique:users|numeric',
+            'phone_number' => 'required|min:11|max:11|numeric',
         ]);
 
         $input = $request->all();

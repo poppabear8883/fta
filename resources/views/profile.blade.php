@@ -28,6 +28,10 @@
                 {!! Form::label('email', 'Email Address:', ['class' => 'control-label']) !!}
                 {!! Form::email('email', null, ['class' => 'form-control']) !!}
             </div>
+            <div class="form-group">
+                {!! Form::label('phone_number', 'Phone Number:', ['class' => 'control-label']) !!}
+                {!! Form::text('phone_number', null, ['class' => 'form-control']) !!}
+            </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">

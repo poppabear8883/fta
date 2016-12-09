@@ -33,6 +33,10 @@ Route::resource('bids', 'BidController');
 
 
 Route::get('/notify/welcome', function() {
-    \Auth::user()->notify(new UserRegistered());
-    return redirect()->back();
+    if(auth()->check()) {
+        auth()->user()->notify(new UserRegistered());
+        return response('Success', 200);
+    }
+
+    return response('User Not Logged In');
 });

@@ -24,20 +24,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('bidder_number') ? ' has-error' : '' }}">
-                            <label for="bidder_number" class="col-md-4 control-label">FTA Bidder Number</label>
-
-                            <div class="col-md-6">
-                                <input id="bidder_number" type="text" class="form-control" name="bidder_number" value="{{ old('bidder_number') }}" required>
-
-                                @if ($errors->has('bidder_number'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('bidder_number') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
@@ -47,6 +33,34 @@
                                 @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('phone_number') ? ' has-error' : '' }}">
+                            <label for="phone_number" class="col-md-4 control-label">Phone Number</label>
+
+                            <div class="col-md-6">
+                                <input id="phone_number" type="text" class="form-control" name="phone_number" value="{{ old('phone_number') }}" required>
+                                <small>Format: 15551112222 (Used for SMS Notifications)</small>
+                                @if ($errors->has('phone_number'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('phone_number') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('bidder_number') ? ' has-error' : '' }}">
+                            <label for="bidder_number" class="col-md-4 control-label">FTA Bidder Number</label>
+
+                            <div class="col-md-6">
+                                <input id="bidder_number" type="text" class="form-control" name="bidder_number" value="{{ old('bidder_number') }}" required>
+
+                                @if ($errors->has('bidder_number'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('bidder_number') }}</strong>
                                     </span>
                                 @endif
                             </div>

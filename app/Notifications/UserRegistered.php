@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\NexmoMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -29,7 +30,23 @@ class UserRegistered extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['nexmo', 'mail'];
+    }
+
+    /**
+     * Get the Nexmo / SMS representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return NexmoMessage
+     */
+    public function toNexmo($notifiable)
+    {
+        return (new NexmoMessage)
+            ->content('Welcome To Bidfta App. This app is in active development and is in a Beta state! If you experience any issues please email support@bidftaapp.com
+
+Thank you for using our app, we hope you find it useful!
+
+This app is not affiliated with bidfta.com or Fast Track Auctions!');
     }
 
     /**
