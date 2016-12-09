@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Repositories\BidRepositoryInterface;
 use App\Bid;
 use Yajra\Datatables\Datatables;
 
