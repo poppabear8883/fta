@@ -9,4 +9,5 @@ interface BidRepositoryInterface {
     public function getCurBidsAmount();
     public function getDataTable();
     public function getWonDataTable();
+    public function getRemoteData($url);
 }

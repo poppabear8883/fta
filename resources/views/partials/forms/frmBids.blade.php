@@ -27,7 +27,7 @@
     <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('name', 'Name:', ['class' => 'control-label']) !!}
-            {!! Form::text('name', null, ['class' => 'form-control']) !!}
+            {!! Form::text('name', (isset($data['Brand']) && $data['Brand'] != '' ? $data['Brand'] : null), ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('cur_bid', 'Current Bid:', ['class' => 'control-label']) !!}

@@ -3,19 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Bid;
+use App\Repositories\BidRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BidController extends Controller
 {
 
+    private $repo;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BidRepositoryInterface $repo)
     {
+        $this->repo = $repo;
         $this->middleware('auth');
     }
 
@@ -36,6 +40,7 @@ class BidController extends Controller
      */
     public function create()
     {
+        //$data = $this->repo->getRemoteData('example');
         return view('new');
     }
 
