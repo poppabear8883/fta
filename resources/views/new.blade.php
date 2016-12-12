@@ -23,7 +23,7 @@
 
             $('#datetimepicker').datetimepicker({
                 step: 5,
-                format: 'Y-m-d H:i',
+                format: 'Y-m-d H:i:s',
                 formatTime: 'H:i'
             });
         });

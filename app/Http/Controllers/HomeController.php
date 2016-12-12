@@ -27,7 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        if(\Auth::guest()) {
+        if(auth()->guest()) {
             return view('welcome');
         }
 

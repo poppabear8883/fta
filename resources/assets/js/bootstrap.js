@@ -13,6 +13,12 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 /**
+ * jsTimezoneDetect
+ */
+window.jstz = require('jstimezonedetect');
+
+
+/**
  * jQuery Plugins
  */
 require('jquery-datetimepicker');
@@ -24,13 +30,15 @@ require('jquery-maskmoney/src/jquery.maskMoney.js');
  */
 window.dt = require('datatables.net')(window, $);
 require('datatables.net-bs/js/dataTables.bootstrap')(window, $);
+require('datatables.net-responsive/js/dataTables.responsive')(window, $);
+require('datatables.net-responsive-bs/js/responsive.bootstrap')(window, $);
 
 window.buttons = require('datatables.net-buttons')(window, $);
-require( 'datatables.net-buttons-bs/js/buttons.bootstrap.js' )(window, $);
-require( 'datatables.net-buttons/js/buttons.colVis.js' )(window, $);
-require( 'datatables.net-buttons/js/buttons.html5.js' )(window, $);
-require( 'datatables.net-buttons/js/buttons.flash.js' )(window, $);
-require( 'datatables.net-buttons/js/buttons.print.js' )(window, $);
+require( 'datatables.net-buttons-bs/js/buttons.bootstrap' )(window, $);
+require( 'datatables.net-buttons/js/buttons.colVis' )(window, $);
+require( 'datatables.net-buttons/js/buttons.html5' )(window, $);
+require( 'datatables.net-buttons/js/buttons.flash' )(window, $);
+require( 'datatables.net-buttons/js/buttons.print' )(window, $);
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

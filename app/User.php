@@ -10,13 +10,11 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are NOT mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password', 'bidder_number', 'budget', 'phone_number'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -30,5 +28,4 @@ class User extends Authenticatable
     public function bids() {
         return $this->hasMany(Bid::class);
     }
-
 }

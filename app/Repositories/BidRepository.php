@@ -66,7 +66,7 @@ class BidRepository implements BidRepositoryInterface {
     public function getWonDataTable()
     {
         $bids = Bid::where([
-            ['user_id', '=', \Auth::user()->id],
+            ['user_id', '=', auth()->user()->id],
             ['won', '=', 1]
         ])->get();
         return Datatables::of($bids)->make(true);

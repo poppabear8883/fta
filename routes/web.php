@@ -11,7 +11,11 @@
 |
 */
 
+use App\Bid;
 use App\Notifications\UserRegistered;
+use App\Notified;
+use App\User;
+use Carbon\Carbon;
 
 Route::get('/', 'HomeController@index');
 
@@ -32,11 +36,6 @@ Route::patch('bid/{id}/won', 'BidController@updateWon');
 Route::resource('bids', 'BidController');
 
 
-Route::get('/notify/welcome', function() {
-    if(auth()->check()) {
-        auth()->user()->notify(new UserRegistered());
-        return response('Success', 200);
-    }
+Route::get('/debug', function() {
 
-    return response('User Not Logged In');
 });

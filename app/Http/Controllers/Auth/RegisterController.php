@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Notifications\UserRegistered;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -51,8 +52,9 @@ class RegisterController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
-            'bidder_number' => 'required|min:4|max:8|unique:users|numeric',
-            'phone_number' => 'required|min:11|max:11|numeric'
+            'bidder_number' => 'required|numeric|unique:users',
+            'phone_number' => 'required|numeric',
+            'timezone' => 'required',
         ]);
     }
 
@@ -64,12 +66,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'bidder_number' => $data['bidder_number'],
             'phone_number' => $data['phone_number'],
+            'timezone' => $data['timezone'],
         ]);
+
+        $user->notify(new UserRegistered());
+        return $user;
     }
 }

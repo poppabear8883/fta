@@ -10,7 +10,8 @@
         "yajra/laravel-datatables-oracle": "~6.0",
         "laravelcollective/html": "^5.3.0",
         "guzzlehttp/guzzle": "^6.2",
-        "nexmo/client": "@beta"
+        "nexmo/client": "@beta",
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

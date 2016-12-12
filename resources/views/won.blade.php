@@ -24,16 +24,19 @@
                     <div class="panel-body">
                         <div id="button_tools" style="margin-bottom: 15px"></div>
 
-                        <table class="table table-striped dataTable no-footer" id="won-table">
+                        <table id="won-table" class="table table-striped dt-responsive nowrap dataTable no-footer"
+                               cellspacing="0"
+                               width="100%"
+                                >
                             <thead>
                             <tr>
-                                <th></th>
-                                <th>id</th>
-                                <th>url</th>
-                                <th>Ended</th>
-                                <th>Name</th>
-                                <th>Location</th>
-                                <th>Amount</th>
+                                <th class="desktop"></th>
+                                <th class="never">id</th>
+                                <th class="never">url</th>
+                                <th class="min-tablet-l">Ended</th>
+                                <th class="all">Name</th>
+                                <th class="min-table-l">Location</th>
+                                <th class="min-tablet-l">Amount</th>
                             </tr>
                             </thead>
                         </table>
@@ -70,20 +73,13 @@
 
         var table = sel_table.DataTable({
             dom: 'Blfrtip',
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate
+                }
+            },
             buttons: {
                 buttons: [
-                    {
-                        extend: 'copy',
-                        className: 'btn-sm'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'btn-sm'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn-sm'
-                    },
                     {
                         extend: 'print',
                         className: 'btn-sm btn-primary',

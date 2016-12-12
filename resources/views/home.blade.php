@@ -20,12 +20,12 @@
                                 <div id="budgetProgress" class="progress-bar progress-bar-info text-center" role="progressbar"
                                      aria-valuenow="{{$max_total}}"
                                      aria-valuemin="0"
-                                     aria-valuemax="{{\Auth::user()->budget}}"
-                                     style="width: 40%"
+                                     aria-valuemax="{{auth()->user()->budget}}"
+                                     style="width: {{($max_total/auth()->user()->budget) * 100}}%"
                                 >
-                                    ${{ $max_total }} out of ${{\Auth::user()->budget}}
                                 </div>
                             </div>
+                            <h4>${{ $max_total }} out of ${{auth()->user()->budget}}</h4>
                             <a href="/profile">Change Budget</a>
                         </div>
                         <div class="col-md-2">
@@ -56,27 +56,30 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="pull-right">
+                            <div class="text-center">
                                 <a href="bids/create" class="btn btn-xs btn-success"><i
                                             class="glyphicon glyphicon-plus"></i> Add New Bid</a>
                             </div>
                         </div>
                     </div>
-
+                    <br/>
                     <div id="button_tools" style="margin-bottom: 15px"></div>
 
-                    <table class="table table-striped dataTable no-footer" id="bids-table">
+                    <table id="bids-table" class="table table-striped dt-responsive nowrap dataTable no-footer"
+                           cellspacing="0"
+                           width="100%"
+                    >
                         <thead>
                         <tr>
-                            <th></th>
-                            <th>id</th>
-                            <th>url</th>
-                            <th>Ends</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Current Bid</th>
-                            <th>Max Bid</th>
-                            <th>Tools</th>
+                            <th class="desktop"></th>
+                            <th class="never">id</th>
+                            <th class="never">url</th>
+                            <th class="min-tablet-l">Ends</th>
+                            <th class="all">Name</th>
+                            <th class="desktop">Location</th>
+                            <th class="desktop">Current Bid</th>
+                            <th class="desktop">Max Bid</th>
+                            <th class="min-tablet-l">Tools</th>
                         </tr>
                         </thead>
                     </table>
@@ -100,20 +103,14 @@
 
         var table = sel_table.DataTable({
             dom: 'Blfrtip',
+            responsive: {
+                details: {
+                    display: $.fn.dataTable.Responsive.display.childRowImmediate,
+                    type: ''
+                }
+            },
             buttons: {
                 buttons: [
-                    {
-                        extend: 'copy',
-                        className: 'btn-sm'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'btn-sm'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn-sm'
-                    },
                     {
                         extend: 'print',
                         className: 'btn-sm btn-primary',
@@ -180,7 +177,7 @@
                         var id = row['id'];
 
                         return '<div class="row">' +
-                                '<div class="col-md-1">' +
+                                '<div class="col-xs-1">' +
                                 '<form method="POST" action="bid/' + id + '/won" accept-charset="UTF-8">' +
                                 '<input name="_method" type="hidden" value="PATCH">' +
                                 '<input name="_token" type="hidden" value="{{csrf_token()}}">' +
@@ -188,10 +185,10 @@
                                 '<button type="submit" class="btn btn-xs btn-success hide" id="btnWon' + id + '">' +
                                 '<i class="glyphicon glyphicon-check"></i></button>' +
                                 '</form>' +
-                                '</div><div class="col-md-1">' +
+                                '</div><div class="col-xs-1">' +
                                 '<a href="bids/' + id + '/edit" class="btn btn-xs btn-primary" id="btnEdit' + id + '">' +
                                 '<i class="glyphicon glyphicon-pencil"></i></a>' +
-                                '</div><div class="col-md-1">' +
+                                '</div><div class="col-xs-1">' +
                                 '<form method="POST" action="bids/' + id + '" accept-charset="UTF-8">' +
                                 '<input name="_method" type="hidden" value="DELETE">' +
                                 '<input name="_token" type="hidden" value="{{csrf_token()}}">' +
@@ -223,7 +220,7 @@
             }, {
                 "data": "max_bid"
 
-            }]
+            },{}]
         });
 
         table.buttons().container()
@@ -247,5 +244,7 @@
             }
         });
     });
+
+    /**/
 </script>
 @endpush

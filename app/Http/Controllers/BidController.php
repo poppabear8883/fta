@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bid;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BidController extends Controller
@@ -45,6 +46,10 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
+        $uid = auth()->user()->id;
+        $timezone = auth()->user()->timezone;
+        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $timezone)->setTimezone('UTC');
+
         $this->validate($request, [
             'name' => 'required',
             'url' => 'required',
@@ -55,10 +60,10 @@ class BidController extends Controller
         ]);
 
         Bid::create([
-            'user_id' => \Auth::user()->id,
+            'user_id' => $uid,
             'name' => $request->get('name'),
             'url' => $request->get('url'),
-            'datetime' => $request->get('datetime'),
+            'datetime' => $datetime,
             'location' => $request->get('location'),
             'pickup' => $request->get('pickup'),
             'notes' => $request->get('notes'),
@@ -103,6 +108,9 @@ class BidController extends Controller
      */
     public function update($id, Request $request)
     {
+        $timezone = auth()->user()->timezone;
+        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $timezone)->setTimezone('UTC');
+
         $bid = Bid::findOrFail($id);
 
         $this->validate($request, [
@@ -114,9 +122,16 @@ class BidController extends Controller
             'cur_bid' => 'required'
         ]);
 
-        $input = $request->all();
-
-        $bid->fill($input)->save();
+        $bid->fill([
+            'name' => $request->get('name'),
+            'url' => $request->get('url'),
+            'datetime' => $datetime,
+            'location' => $request->get('location'),
+            'pickup' => $request->get('pickup'),
+            'notes' => $request->get('notes'),
+            'cur_bid' => $request->get('cur_bid'),
+            'max_bid' => $request->get('max_bid')
+        ])->save();
 
         \Session::flash('flash_message', 'Successful!');
 

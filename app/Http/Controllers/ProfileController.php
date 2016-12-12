@@ -41,10 +41,10 @@ class ProfileController extends Controller
 
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255',
             'budget' => 'required',
-            'bidder_number' => 'required|min:4|max:8|unique:users|numeric',
-            'phone_number' => 'required|min:11|max:11|numeric',
+            'bidder_number' => 'required|numeric',
+            'phone_number' => 'required|numeric',
         ]);
 
         $input = $request->all();
