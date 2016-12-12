@@ -16,6 +16,7 @@ use App\Notifications\UserRegistered;
 use App\Notified;
 use App\User;
 use Carbon\Carbon;
+use Yangqi\Htmldom\Htmldom;
 
 Route::get('/', 'HomeController@index');
 
@@ -37,5 +38,8 @@ Route::resource('bids', 'BidController');
 
 
 Route::get('/debug', function() {
+    $html = new Htmldom('');
 
+    $form = $html->find('form[name=bidform]');
+    echo $form[0]->children(1)->children(1)->children(2)->innertext;
 });

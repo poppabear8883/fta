@@ -168,6 +168,7 @@ return [
          */
         Yajra\Datatables\DatatablesServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Yangqi\Htmldom\HtmldomServiceProvider::class,
         //
 
         /*
@@ -229,6 +230,7 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Htmldom' => Yangqi\Htmldom\Htmldom::class,
     ],
 
 ];
