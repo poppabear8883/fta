@@ -8,16 +8,16 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            {!! Form::label('location', 'Location:', ['class' => 'control-label']) !!}
-            {!! Form::text('location', null, ['class' => 'form-control']) !!}
+            {!! Form::label('url', 'Item URL:', ['class' => 'control-label']) !!}
+            {!! Form::text('url', (isset($url) && $url != '' ? $url : null), ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
-            {!! Form::label('url', 'Item URL:', ['class' => 'control-label']) !!}
-            {!! Form::text('url', null, ['class' => 'form-control']) !!}
+            {!! Form::label('location', 'Location:', ['class' => 'control-label']) !!}
+            {!! Form::text('location', (isset($loc) && $loc != '' ? $loc : null), ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('datetime', 'Ends:', ['class' => 'control-label']) !!}
-            {!! Form::text('datetime', null, ['class' => 'form-control', 'id' => 'datetimepicker'])  !!}
+            {!! Form::text('datetime', (isset($edate) && $edate != '' ? $edate : null), ['class' => 'form-control', 'id' => 'datetimepicker'])  !!}
         </div>
         <div class="form-group">
             {!! Form::label('pickup', 'Pickup Details:', ['class' => 'control-label']) !!}
@@ -27,15 +27,15 @@
     <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('name', 'Name:', ['class' => 'control-label']) !!}
-            {!! Form::text('name', (isset($data['Brand']) && $data['Brand'] != '' ? $data['Brand'] : null), ['class' => 'form-control']) !!}
+            {!! Form::text('name', (isset($name) && $name != '' ? $name : null), ['class' => 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('cur_bid', 'Current Bid:', ['class' => 'control-label']) !!}
-            {!! Form::text('cur_bid', null, ['class' => 'form-control money-input']) !!}
+            {!! Form::text('cur_bid', (isset($cbid) && is_numeric($cbid) ? $cbid : '0.00'), ['class' => 'form-control money-input']) !!}
         </div>
-        <div class="form-group">
+        <div id="grpMbid" class="form-group">
             {!! Form::label('max_bid', 'Max Bid:', ['class' => 'control-label']) !!}
-            {!! Form::text('max_bid', null, ['class' => 'form-control money-input']) !!}
+            {!! Form::text('max_bid', '0.00', ['class' => 'form-control money-input']) !!}
         </div>
     </div>
 </div>
@@ -44,7 +44,7 @@
     <div class="col-md-12">
         <div class="form-group">
             {!! Form::label('notes', 'Extra Information:', ['class' => 'control-label']) !!}
-            {!! Form::textarea('notes', null, ['class' => 'form-control']) !!}
+            {!! Form::textarea('notes', (isset($notes) && $notes != '' ? $notes : null), ['class' => 'form-control']) !!}
         </div>
     </div>
 </div>

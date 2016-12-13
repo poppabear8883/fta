@@ -12,6 +12,8 @@ class BidController extends Controller
 
     private $repo;
 
+    private $html;
+
     /**
      * Create a new controller instance.
      *
@@ -40,8 +42,34 @@ class BidController extends Controller
      */
     public function create()
     {
-        //$data = $this->repo->getRemoteData('example');
         return view('new');
+    }
+
+    public function createPost(Request $request) {
+        $this->validate($request, [
+            'itemUrl' => 'required|url'
+        ]);
+
+        $url = $request->get('itemUrl');
+
+        $html = $this->repo->Htmldom($url);
+        $loc = $html->getRemoteLocation();
+        $edate = $html->getRemoteEndDate();
+        $data = $html->getRemoteData();
+        $cbid = $html->getRemoteCurBid();
+        $notes = $html->getRemoteDetails();
+
+        preg_match('/^(?>\S+\s*){1,6}/', $data['Description'], $name);
+
+        return view('new', [
+            'data' => $data,
+            'url' => $url,
+            'cbid' => $cbid,
+            'edate' => $edate,
+            'loc' => $loc,
+            'name' => $name[0],
+            'notes' => $notes
+        ]);
     }
 
     /**

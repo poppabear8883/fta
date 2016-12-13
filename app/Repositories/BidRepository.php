@@ -3,13 +3,21 @@
 namespace App\Repositories;
 
 use App\Bid;
+use Carbon\Carbon;
 use Yajra\Datatables\Datatables;
 use Yangqi\Htmldom\Htmldom;
 
 class BidRepository implements BidRepositoryInterface {
 
+    private $html;
+
+    private $remoteDateTable;
+
     private $remoteForm;
 
+    public function __construct() {
+
+    }
 
     /**
      * @return mixed
@@ -94,14 +102,55 @@ class BidRepository implements BidRepositoryInterface {
         return Datatables::of($bids)->make(true);
     }
 
+    public function Htmldom($url) {
+        $this->html = new Htmldom($url);
+        $this->remoteForm = $this->html->find('form[name=bidform]')[0];
+        $this->remoteDateTable = $this->html->find('table[id=TableTop]')[0];
+        return $this;
+    }
+
+    public function getRemoteCurBid() {
+        return $this->remoteForm->children(1)->children(1)->children(5)->innertext;
+    }
+
+    public function getRemoteEndDate() {
+        $pattern = '/\s?-\s?/';
+
+        $subject = strip_tags($this->remoteDateTable
+            ->children(0)
+            ->children(1)
+            ->innertext);
+
+        $arr = preg_split($pattern, trim($subject));
+        $result = str_replace(' EST', '', $arr[3]);
+        $tz = auth()->user()->timezone;
+        $date = Carbon::createFromFormat('F jS, Y g:i A', $result, $tz)
+            ->setTimezone($tz)
+            ->format('Y-m-d H:i:s');
+        return $date;
+    }
+
+    public function getRemoteLocation() {
+        $pattern = '/\s?-\s?/';
+
+        $subject = strip_tags($this->remoteDateTable
+            ->children(0)
+            ->children(1)
+            ->innertext);
+
+        $arr = preg_split($pattern, trim($subject));
+        $result = $arr[2];
+
+        preg_match('/^(?>\S+\s*){1,4}/', $result, $match);
+
+        return rtrim($match[0]);
+    }
+
     /**
      * @param $url
      * @return array
      */
-    public function getRemoteData($url) {
-        $html = new Htmldom($url);
-        $this->remoteForm = $html->find('form[name=bidform]')[0];
-
+    public function getRemoteData() {
         $pattern = '/<br\s?\/?>/';
         $subject = $this->remoteForm
             ->children(1)
@@ -124,16 +173,30 @@ class BidRepository implements BidRepositoryInterface {
                 $key = str_replace('Item ', '', trim($key));
                 $key = str_replace(' #', '', trim($key));
 
-                if(trim($key) == 'Front Page') {
+                if(trim($key) == 'Front Page' || trim($key) == 'Contact') {
                     break;
                 }
 
                 $value = $keyValuePairs[1];
+                $value = preg_replace('/[^A-Za-z0-9\s\-.]/', '', $value);
 
                 $itemArray[] = [trim($key) => trim($value)];
             }
         }
 
+        //dd(array_collapse($itemArray));
+
         return array_collapse($itemArray);
+    }
+
+    public function getRemoteDetails() {
+        $data = $this->getRemoteData();
+        $details = '';
+
+        foreach($data as $k => $v) {
+            $details .= $k .': '.$v."\n";
+        }
+
+        return $details;
     }
 }

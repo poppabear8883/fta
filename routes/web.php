@@ -34,6 +34,7 @@ Route::patch('profile/{id}', ['uses' => 'ProfileController@update', 'as' => 'pro
 
 Route::patch('bid/{id}/won', 'BidController@updateWon');
 
+Route::post('bids/create', ['uses' => 'BidController@createPost', 'as' => 'bids.create.post']);
 Route::resource('bids', 'BidController');
 
 

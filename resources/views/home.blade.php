@@ -56,10 +56,21 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="text-center">
-                                <a href="bids/create" class="btn btn-xs btn-success"><i
-                                            class="glyphicon glyphicon-plus"></i> Add New Bid</a>
+                            {!! Form::open(['route' => 'bids.create']) !!}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        {!! Form::text('itemUrl', null, [
+                                        'class' => 'form-control',
+                                        'placeholder' => 'Paste item url and click button'
+                                        ]) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    {!! Form::submit('Add New Bid', ['class' => 'btn btn-success']) !!}
+                                </div>
                             </div>
+                            {!! Form::close() !!}
                         </div>
                     </div>
                     <br/>
