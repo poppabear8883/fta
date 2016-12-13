@@ -38,5 +38,13 @@ Route::resource('bids', 'BidController');
 
 
 Route::get('/debug', function() {
+    /*$html = new Htmldom('');
+    $form = $html->find('form[name=bidform]')[0];
+
+    dd($form
+        ->children(1)
+        ->children(1)
+        ->children(3)
+        ->innertext);*/
     //dd();
 });

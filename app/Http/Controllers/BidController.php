@@ -124,7 +124,8 @@ class BidController extends Controller
             'datetime' => 'required',
             'location' => 'required',
             'pickup' => 'required',
-            'cur_bid' => 'required'
+            'cur_bid' => 'required',
+            'max_bid' => 'required'
         ]);
 
         $bid->fill([

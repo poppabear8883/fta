@@ -8,6 +8,9 @@ use Yangqi\Htmldom\Htmldom;
 
 class BidRepository implements BidRepositoryInterface {
 
+    private $remoteForm;
+
+
     /**
      * @return mixed
      */
@@ -97,19 +100,16 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getRemoteData($url) {
         $html = new Htmldom($url);
+        $this->remoteForm = $html->find('form[name=bidform]')[0];
 
         $pattern = '/<br\s?\/?>/';
-
-        $form = $html->find('form[name=bidform]');
-        $subject = $form[0]
+        $subject = $this->remoteForm
             ->children(1)
             ->children(1)
             ->children(2)
             ->innertext;
 
         $result = preg_split($pattern, trim($subject));
-
-        //dd($result);
 
         $itemArray = [];
 
@@ -118,8 +118,6 @@ class BidRepository implements BidRepositoryInterface {
         foreach ($result as $item) {
             if($item != "") {
                 $keyValuePairs = preg_split($pattern, $item);
-
-                //dd($keyValuePairs);
 
                 $key = preg_replace('/<\/?b>/', '', $keyValuePairs[0]);
                 $key = str_replace(' Information', '', trim($key));
@@ -135,8 +133,6 @@ class BidRepository implements BidRepositoryInterface {
                 $itemArray[] = [trim($key) => trim($value)];
             }
         }
-
-        //dd(array_collapse($itemArray));
 
         return array_collapse($itemArray);
     }
