@@ -9,6 +9,7 @@ window.moment = require('moment');
  */
 
 window.$ = window.jQuery = require('jquery');
+require('jquery-migrate');
 
 require('bootstrap-sass');
 
@@ -39,6 +40,13 @@ require( 'datatables.net-buttons/js/buttons.colVis' )(window, $);
 require( 'datatables.net-buttons/js/buttons.html5' )(window, $);
 require( 'datatables.net-buttons/js/buttons.flash' )(window, $);
 require( 'datatables.net-buttons/js/buttons.print' )(window, $);
+
+
+/**
+ * ADMIN LTE MAIN APP
+ */
+require('admin-lte/dist/js/app.min');
+require('admin-lte/plugins/iCheck/icheck.min');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
