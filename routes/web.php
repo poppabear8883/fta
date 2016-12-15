@@ -11,13 +11,6 @@
 |
 */
 
-use App\Bid;
-use App\Notifications\UserRegistered;
-use App\Notified;
-use App\User;
-use Carbon\Carbon;
-use Yangqi\Htmldom\Htmldom;
-
 Route::get('/', 'HomeController@index');
 
 Auth::routes();
@@ -39,13 +32,5 @@ Route::resource('bids', 'BidController');
 
 
 Route::get('/debug', function() {
-    /*$html = new Htmldom('');
-    $form = $html->find('form[name=bidform]')[0];
 
-    dd($form
-        ->children(1)
-        ->children(1)
-        ->children(3)
-        ->innertext);*/
-    //dd();
 });
