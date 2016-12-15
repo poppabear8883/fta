@@ -44,7 +44,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
 <div id="app" class="wrapper">
 
     <!-- Main Header -->
@@ -53,9 +53,9 @@ desired effect
         <!-- Logo -->
         <a href="/" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>Bfta</b> App</span>
+            <span class="logo-mini"><b>v2</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Bidfta</b> App</span>
+            <span class="logo-lg"><b>Bidfta App</b> v2</span>
         </a>
 
         <!-- Header Navbar -->
@@ -247,8 +247,8 @@ desired effect
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Page Header
-                <small>Optional description</small>
+                @yield('page_header')
+                <small>@yield('page_header_description')</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -270,10 +270,10 @@ desired effect
     <footer class="main-footer">
         <!-- To the right -->
         <div class="pull-right hidden-xs">
-            Anything you want
+            <b>Bidfta App</b> v2
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a href="#">ServNX</a>.</strong> All rights reserved.
     </footer>
 
     <!-- Control Sidebar -->

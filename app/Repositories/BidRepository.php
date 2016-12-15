@@ -199,4 +199,16 @@ class BidRepository implements BidRepositoryInterface {
 
         return $details;
     }
+
+    public function getRecentlyWon()
+    {
+        $uid = auth()->user()->id;
+        $bids = Bid::select(['name', 'location', 'datetime', 'cur_bid'])
+        ->where('user_id', $uid)
+        ->where('won', 1)
+        ->orderBy('datetime', 'desc')
+            ->limit(5)->get();
+
+        return $bids;
+    }
 }

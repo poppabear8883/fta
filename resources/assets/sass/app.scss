@@ -22,7 +22,7 @@
 
 // Admin LTE
 @import "node_modules/admin-lte/dist/css/AdminLTE.min";
-@import "node_modules/admin-lte/dist/css/skins/skin-yellow.min";
+@import "node_modules/admin-lte/dist/css/skins/skin-blue.min";
 
 // plugins
 @import "node_modules/admin-lte/plugins/iCheck/square/blue";
@@ -55,4 +55,16 @@ td.details-control {
 }
 tr.shown td.details-control {
   background: url('../images/details_close.png') no-repeat center center;
+}
+
+// AdminLTE Overrides
+.main-header .sidebar-toggle {
+  padding: 12px 12px;
+}
+
+.skin-blue .main-header .logo:hover {
+  //background-color: #222D32;
+}
+.skin-blue .main-header .logo {
+  //background-color: #222D32;
 }

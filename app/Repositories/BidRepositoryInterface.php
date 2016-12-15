@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 interface BidRepositoryInterface {
+    public function getRecentlyWon();
     public function getWonCount();
     public function getActiveCount();
     public function getMaxBidsAmount();
