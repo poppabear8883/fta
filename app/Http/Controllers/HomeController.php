@@ -32,7 +32,8 @@ class HomeController extends Controller
         }
 
         return view('home',[
-            'won' => $this->repo->getWonCount(),
+            'won_count' => $this->repo->getWonCount(),
+            'active_count' => $this->repo->getActiveCount(),
             'max_total' => $this->repo->getMaxBidsAmount(),
             'cur_total' => $this->repo->getCurBidsAmount()
         ]);

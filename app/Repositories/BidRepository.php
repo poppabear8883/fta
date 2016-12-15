@@ -24,20 +24,20 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getActiveCount()
     {
-        return Bid::where([
+        return count(Bid::where([
             ['user_id', '=', \Auth::user()->id],
             ['won', '=', '0']
-        ])->get();
+        ])->get());
     }
 
     /**
      * @return mixed
      */
     public function getWonCount() {
-        return Bid::where([
+        return count(Bid::where([
             ['user_id', '=', \Auth::user()->id],
             ['won', '=', '1']
-        ])->get();
+        ])->get());
     }
 
     /**
