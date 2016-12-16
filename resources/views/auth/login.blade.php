@@ -2,7 +2,7 @@
 
 @section('body')
 <body class="hold-transition login-page">
-<div class="login-box">
+<div id="app" class="login-box">
     <div class="login-logo">
         <a href="/"><b>Bidfta App</b> v2</a>
     </div>

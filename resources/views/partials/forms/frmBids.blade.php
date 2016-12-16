@@ -35,7 +35,7 @@
         </div>
         <div id="grpMbid" class="form-group">
             {!! Form::label('max_bid', 'Max Bid:', ['class' => 'control-label']) !!}
-            {!! Form::text('max_bid', '0.00', ['class' => 'form-control money-input']) !!}
+            {!! Form::text('max_bid', null, ['class' => 'form-control money-input']) !!}
         </div>
     </div>
 </div>

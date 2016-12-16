@@ -47,6 +47,7 @@ require( 'datatables.net-buttons/js/buttons.print' )(window, $);
  */
 require('admin-lte/dist/js/app.min');
 require('admin-lte/plugins/iCheck/icheck.min');
+//require('admin-lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all');
 
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces

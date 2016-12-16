@@ -11,12 +11,11 @@
 |
 */
 
-Route::get('/', 'HomeController@index');
-
 Auth::routes();
+Route::get('/', 'DashboardController@index');
+Route::get('/dashboard', ['uses' => 'DashboardController@index', 'as' => 'dashboard']);
 
-Route::get('home',['uses'=>'HomeController@index', 'as' => 'dt']);
-Route::get('home/{data}',['uses'=>'HomeController@getData', 'as' => 'dt.data']);
+Route::get('dt/{data}',['uses'=>'BidController@getData', 'as' => 'dt.data']);
 
 Route::get('won',['uses'=>'WonController@index', 'as' => 'wdt']);
 Route::get('won/{data}',['uses'=>'WonController@getData', 'as' => 'wdt.data']);

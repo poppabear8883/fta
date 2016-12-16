@@ -32,7 +32,7 @@ class BidController extends Controller
      */
     public function index()
     {
-        return redirect('home');
+        return view('pages.bids');
     }
 
     /**
@@ -210,5 +210,15 @@ class BidController extends Controller
         \Session::flash('flash_message', 'Bid successfully deleted!');
 
         return redirect()->back();
+    }
+
+    /**
+     * Process datatables ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getData()
+    {
+        return $this->repo->getDataTable();
     }
 }
