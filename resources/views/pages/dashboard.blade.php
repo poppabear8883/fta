@@ -19,7 +19,7 @@
                     <p>Active Bids</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-bookmark-o"></i>
+                    <i class="fa fa-tags"></i>
                 </div>
                 <a href="/" class="small-box-footer">
                     View Now <i class="fa fa-arrow-circle-right"></i>
@@ -36,9 +36,9 @@
                     <p>Won Items</p>
                 </div>
                 <div class="icon">
-                    <i class="fa fa-bar-chart-o"></i>
+                    <i class="fa fa-bookmark-o"></i>
                 </div>
-                <a href="#" class="small-box-footer">
+                <a href="/won" class="small-box-footer">
                     View Now <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
@@ -63,11 +63,11 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-red">
+            <div class="small-box {{(($max_total/auth()->user()->budget)*100 >= 75 ? 'bg-red' : 'bg-purple')}}">
                 <div class="inner">
-                    <h3>${{$max_total}}</h3>
+                    <h3>${{$max_total}} <small>{{(($max_total/auth()->user()->budget)*100 >= 75 ? 'Warning!' : '')}}</small></h3>
 
-                    <p>${{ $max_total }} out of ${{auth()->user()->budget}}</p>
+                    <p>{{($max_total/auth()->user()->budget)*100}}% of budget ${{auth()->user()->budget}}</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-credit-card-alt"></i>
@@ -88,15 +88,18 @@
                     <h3 class="box-title">Quick Email | Suggestions | Issues</h3>
                 </div>
                 <div class="box-body">
-                    <form action="#" method="post">
+                    <form id="quickEmailForm" action="/quick/email" method="post">
+                        {{csrf_field()}}
+                        <input name="from" type="hidden" value="{{auth()->user()->email}}">
+
                         <div class="form-group">
-                            <input name="support_email" type="email" class="form-control" value="support@bidftaapp.com" disabled>
+                            <input name="email" type="text" class="form-control" value="support@bidftaapp.com" readonly>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="subject" placeholder="Subject">
+                            <input name="subject" type="text" class="form-control" placeholder="Subject">
                         </div>
                         <div class="form-group">
-                            <textarea class="textarea" style="margin: 0; width: 100%; height: 250px;" placeholder="Message"></textarea>
+                            <textarea name="message" class="form-control" rows="5" placeholder="Message"></textarea>
                         </div>
                     </form>
                 </div>
@@ -135,11 +138,21 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer text-center">
-                    <a href="javascript:void(0)" class="uppercase">View All Products</a>
+                    <a href="/won" class="uppercase">View All</a>
                 </div>
                 <!-- /.box-footer -->
             </div>
         </div>
     </div>
-
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#sendEmail').click(function(e) {
+            e.preventDefault();
+            $('#quickEmailForm').submit();
+        })
+    });
+</script>
+@endpush

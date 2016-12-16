@@ -137,7 +137,7 @@
                     "render": function (data, type, row, meta) {
 
                         var itemUrl = row['url'];
-
+                        if(data.length > 15) data = data.substring(0,15) + ' ...';
                         return '<a href="' + itemUrl + '" target="_blank">' + data + '</a>';
                         //return data;
                     }

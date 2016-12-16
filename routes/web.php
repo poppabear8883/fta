@@ -33,3 +33,5 @@ Route::resource('bids', 'BidController');
 Route::get('/debug', function() {
 
 });
+
+Route::post('quick/email', 'DashboardController@postQuickEmail');
