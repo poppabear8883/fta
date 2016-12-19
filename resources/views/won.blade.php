@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.v2')
 
 @section('content')
     @include('partials.alerts.errors')
@@ -15,7 +15,7 @@
                     <div class="panel-heading">
                         My Won Items
                         <div class="pull-right">
-                            <a href="/home" class="btn btn-xs btn-primary">
+                            <a href="/bids" class="btn btn-xs btn-primary">
                                 Active Bids <span class="badge">{{count($active)}}</span>
                             </a>
                         </div>

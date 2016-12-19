@@ -25,7 +25,7 @@ class BidRepository implements BidRepositoryInterface {
     public function getActiveCount()
     {
         return count(Bid::where([
-            ['user_id', '=', \Auth::user()->id],
+            ['user_id', '=', auth()->user()->id],
             ['won', '=', '0']
         ])->get());
     }
@@ -35,7 +35,7 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getWonCount() {
         return count(Bid::where([
-            ['user_id', '=', \Auth::user()->id],
+            ['user_id', '=', auth()->user()->id],
             ['won', '=', '1']
         ])->get());
     }
@@ -49,7 +49,7 @@ class BidRepository implements BidRepositoryInterface {
 
         $bids = Bid::select(['cur_bid'])
             ->where([
-                ['user_id', '=', \Auth::user()->id],
+                ['user_id', '=', auth()->user()->id],
                 ['won', '=', '0']
             ])->get()->pluck('cur_bid');
 
@@ -68,9 +68,25 @@ class BidRepository implements BidRepositoryInterface {
 
         $bids = Bid::select(['max_bid'])
             ->where([
-                ['user_id', '=', \Auth::user()->id],
+                ['user_id', '=', auth()->user()->id],
                 ['won', '=', '0']
             ])->get()->pluck('max_bid');
+
+        foreach($bids as $b) {
+            $amount += $b;
+        }
+
+        return $amount;
+    }
+
+    public function getWonAmount() {
+        $amount = 0;
+
+        $bids = Bid::select(['cur_bid'])
+            ->where([
+                ['user_id', '=', auth()->user()->id],
+                ['won', '=', '1']
+            ])->get()->pluck('cur_bid');
 
         foreach($bids as $b) {
             $amount += $b;
@@ -84,7 +100,7 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getDataTable() {
         $bids = Bid::where([
-            ['user_id', '=', \Auth::user()->id],
+            ['user_id', '=', auth()->user()->id],
             ['won', '=', 0]
         ])->get();
         return Datatables::of($bids)->make(true);
@@ -203,8 +219,7 @@ class BidRepository implements BidRepositoryInterface {
     public function getRecentlyWon()
     {
         $uid = auth()->user()->id;
-        $bids = Bid::select(['name', 'location', 'datetime', 'cur_bid'])
-        ->where('user_id', $uid)
+        $bids = Bid::where('user_id', $uid)
         ->where('won', 1)
         ->orderBy('datetime', 'desc')
             ->limit(5)->get();

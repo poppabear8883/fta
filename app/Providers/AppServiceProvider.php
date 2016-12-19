@@ -33,5 +33,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\BidRepositoryInterface',
             'App\Repositories\BidRepository'
         );
+
+        $this->app->bind(
+            'App\Repositories\CalendarRepositoryInterface',
+            'App\Repositories\CalendarRepository'
+        );
     }
 }

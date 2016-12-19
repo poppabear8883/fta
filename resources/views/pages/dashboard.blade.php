@@ -31,7 +31,7 @@
             <!-- small box -->
             <div class="small-box bg-green">
                 <div class="inner">
-                    <h3>{{$won_count}}</h3>
+                    <h3>{{$won_count}} <span style="font-size: 19px">(${{$won_amount}})</span></h3>
 
                     <p>Won Items</p>
                 </div>
@@ -67,7 +67,7 @@
                 <div class="inner">
                     <h3>${{$max_total}} <small>{{(($max_total/auth()->user()->budget)*100 >= 75 ? 'Warning!' : '')}}</small></h3>
 
-                    <p>{{($max_total/auth()->user()->budget)*100}}% of budget ${{auth()->user()->budget}}</p>
+                    <p>{{($max_total/auth()->user()->budget)*100}}% of ${{auth()->user()->budget}}</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-credit-card-alt"></i>
@@ -81,7 +81,48 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
+            <div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Recently Won</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <ul class="products-list product-list-in-box">
+                        @foreach($recently_won as $item)
+                            <li class="item">
+                                <div class="product-img">
+                                    <img src="images/default-50x50.gif" alt="Product Image">
+                                </div>
+                                <div class="product-info">
+                                    <a href="{{$item->url}}" class="product-title">
+                                        {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item->datetime)->setTimezone(auth()->user()->timezone)->format('m/d/Y')}}
+                                        | {{$item->location}}
+                                        <span class="label label-success pull-right">${{$item->cur_bid}}</span>
+                                    </a>
+                            <span class="product-description">
+                              {{$item->name}}
+                            </span>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <a href="/won" class="btn btn-default uppercase pull-left">View All</a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/calendar" class="btn btn-info uppercase pull-right">Calendar</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-footer -->
+            </div>
+        </div>
+        <div class="col-md-6">
             <div class="box box-info">
                 <div class="box-header">
                     <i class="fa fa-envelope"></i>
@@ -109,40 +150,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="box box-success">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Recently Won</h3>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <ul class="products-list product-list-in-box">
-                        @foreach($recently_won as $item)
-                            <li class="item">
-                                <div class="product-img">
-                                    <img src="images/default-50x50.gif" alt="Product Image">
-                                </div>
-                                <div class="product-info">
-                                    <a href="javascript:void(0)" class="product-title">
-                                        {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item->datetime)->setTimezone(auth()->user()->timezone)->format('m/d/Y')}}
-                                        | {{$item->location}}
-                                        <span class="label label-success pull-right">${{$item->cur_bid}}</span>
-                                    </a>
-                            <span class="product-description">
-                              {{$item->name}}
-                            </span>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer text-center">
-                    <a href="/won" class="uppercase">View All</a>
-                </div>
-                <!-- /.box-footer -->
-            </div>
-        </div>
     </div>
 @endsection
 
@@ -151,7 +158,19 @@
     $(document).ready(function() {
         $('#sendEmail').click(function(e) {
             e.preventDefault();
-            $('#quickEmailForm').submit();
+            var inSubject = $('input[name="subject"]');
+            var inMessage = $('textarea[name="message"]');
+
+            inSubject.closest('.form-group').removeClass('has-error');
+            inMessage.closest('.form-group').removeClass('has-error');
+
+            if(inSubject.val() == '') {
+                inSubject.closest('.form-group').addClass('has-error');
+            } else if(inMessage.val() == '') {
+                inMessage.closest('.form-group').addClass('has-error');
+            } else {
+                $('#quickEmailForm').submit();
+            }
         })
     });
 </script>

@@ -225,16 +225,15 @@ desired effect
                 <!-- Optionally, you can add icons to the links -->
                 <li class="active"><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
                 <li><a href="/bids"><i class="fa fa-tags"></i> <span>Active Bids</span></a></li>
-                <li><a href="/won"><i class="fa fa-bookmark-o"></i> <span>Won Bids</span></a></li>
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
+                    <a href="#"><i class="fa fa-bookmark-o"></i> <span>Won Bids</span>
                         <span class="pull-right-container">
                           <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#">level 2</a></li>
-                        <li><a href="#">level 2</a></li>
+                        <li><a href="/won">View All</a></li>
+                        <li><a href="/calendar">Calendar</a></li>
                     </ul>
                 </li>
             </ul>
@@ -356,7 +355,6 @@ desired effect
 </div>
 <!-- ./wrapper -->
 
-<!-- AdminLTE App -->
 <script src="/js/app.js"></script>
 
 <!-- App scripts -->

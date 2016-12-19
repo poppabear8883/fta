@@ -51,24 +51,19 @@ class BidController extends Controller
         ]);
 
         $url = $request->get('itemUrl');
-
         $html = $this->repo->Htmldom($url);
-        $loc = $html->getRemoteLocation();
-        $edate = $html->getRemoteEndDate();
-        $data = $html->getRemoteData();
-        $cbid = $html->getRemoteCurBid();
-        $notes = $html->getRemoteDetails();
 
+        $data = $html->getRemoteData();
         preg_match('/^(?>\S+\s*){1,6}/', $data['Description'], $name);
 
         return view('new', [
             'data' => $data,
             'url' => $url,
-            'cbid' => $cbid,
-            'edate' => $edate,
-            'loc' => $loc,
+            'cbid' => $html->getRemoteCurBid(),
+            'edate' => $html->getRemoteEndDate(),
+            'loc' => $html->getRemoteLocation(),
             'name' => $name[0],
-            'notes' => $notes
+            'notes' => $html->getRemoteDetails()
         ]);
     }
 

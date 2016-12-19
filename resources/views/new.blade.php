@@ -19,6 +19,8 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            var dates = [];
+
             $('.money-input').maskMoney({allowZero:true});
 
             $('#datetimepicker').datetimepicker({

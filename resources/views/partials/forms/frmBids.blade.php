@@ -1,7 +1,7 @@
 <div class="row">
     <div class="pull-right">
         {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-        <a href="/home" class="btn btn-default">Done</a>
+        <a href="/bids" class="btn btn-default">Done</a>
     </div>
 </div>
 
@@ -33,7 +33,7 @@
             {!! Form::label('cur_bid', 'Current Bid:', ['class' => 'control-label']) !!}
             {!! Form::text('cur_bid', (isset($cbid) && is_numeric($cbid) ? $cbid : '0.00'), ['class' => 'form-control money-input']) !!}
         </div>
-        <div id="grpMbid" class="form-group">
+        <div class="form-group">
             {!! Form::label('max_bid', 'Max Bid:', ['class' => 'control-label']) !!}
             {!! Form::text('max_bid', null, ['class' => 'form-control money-input']) !!}
         </div>
@@ -52,6 +52,6 @@
 <div class="row">
     <div class="pull-right">
         {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-        <a href="/home" class="btn btn-default">Done</a>
+        <a href="/bids" class="btn btn-default">Done</a>
     </div>
 </div>

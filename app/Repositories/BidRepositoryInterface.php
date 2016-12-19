@@ -8,6 +8,7 @@ interface BidRepositoryInterface {
     public function getActiveCount();
     public function getMaxBidsAmount();
     public function getCurBidsAmount();
+    public function getWonAmount();
     public function getDataTable();
     public function getWonDataTable();
     public function Htmldom($url);

@@ -26,6 +26,16 @@ require('jquery-datetimepicker');
 require('jquery-maskmoney/src/jquery.maskMoney.js');
 //require('jquery-confirm/js/jquery-confirm.js');
 
+
+/**
+ * ADMIN LTE MAIN APP
+ */
+require('admin-lte/dist/js/app.min');
+require('admin-lte/plugins/iCheck/icheck.min');
+
+//plugins
+require('fullcalendar');
+
 /**
  * Loading in DataTables and extensions
  */
@@ -41,22 +51,14 @@ require( 'datatables.net-buttons/js/buttons.html5' )(window, $);
 require( 'datatables.net-buttons/js/buttons.flash' )(window, $);
 require( 'datatables.net-buttons/js/buttons.print' )(window, $);
 
-
-/**
- * ADMIN LTE MAIN APP
- */
-require('admin-lte/dist/js/app.min');
-require('admin-lte/plugins/iCheck/icheck.min');
-//require('admin-lte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all');
-
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean
  * and simple, leaving you to focus on building your next great project.
  */
 
-window.Vue = require('vue');
-require('vue-resource');
+//window.Vue = require('vue');
+//require('vue-resource');
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
@@ -64,11 +66,11 @@ require('vue-resource');
  * included with Laravel will automatically verify the header's value.
  */
 
-Vue.http.interceptors.push((request, next) => {
+/*Vue.http.interceptors.push((request, next) => {
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
 
     next();
-});
+});*/
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

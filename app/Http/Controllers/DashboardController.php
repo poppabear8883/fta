@@ -41,6 +41,7 @@ class DashboardController extends Controller
         return view('pages.dashboard',[
             'recently_won' => $this->bid->getRecentlyWon(),
             'won_count' => $this->bid->getWonCount(),
+            'won_amount' => $this->bid->getWonAmount(),
             'active_count' => $this->bid->getActiveCount(),
             'max_total' => $this->bid->getMaxBidsAmount(),
             'cur_total' => $this->bid->getCurBidsAmount()

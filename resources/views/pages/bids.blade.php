@@ -1,6 +1,20 @@
 @extends('layouts.v2')
+@section('page_header')
+    Active Bids
+@endsection
 
+@section('page_header_description')
+    Shows a data table of all your active bids. You can add, delete, edit and mark your bids as won!
+@endsection
 @section('content')
+    @include('partials.alerts.errors')
+
+    @if(Session::has('flash_message'))
+        <div class="alert alert-success">
+            {{ Session::get('flash_message') }}
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default">
@@ -11,7 +25,8 @@
                     {!! Form::open(['route' => 'bids.create']) !!}
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-globe"></i></span>
-                        <input name="itemUrl" type="text" class="form-control" placeholder="Paste Item URL and Click Add ...">
+                        <input name="itemUrl" type="text" class="form-control"
+                               placeholder="Paste Item URL and Click Add ...">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-info btn-flat">Add!</button>
                         </span>
@@ -121,7 +136,6 @@
                         $(nRow).removeClass('tablerow-caution');
                         $(nRow).addClass('tablerow-danger');
                         $(nRow).find('#btnWon' + aData['id']).removeClass('hide');
-                        //$(nRow).find('#btnEdit' + aData['id']).addClass('hide');
                     }
                 }, 1000);
             },
@@ -137,7 +151,7 @@
                     "render": function (data, type, row, meta) {
 
                         var itemUrl = row['url'];
-                        if(data.length > 15) data = data.substring(0,15) + ' ...';
+                        if (data.length > 15) data = data.substring(0, 15) + ' ...';
                         return '<a href="' + itemUrl + '" target="_blank">' + data + '</a>';
                         //return data;
                     }
@@ -191,10 +205,14 @@
             }, {
                 "data": "max_bid"
 
-            },{}]
+            }, {}]
         });
 
         table.buttons().container().appendTo('#button_tools');
+
+        table.on('responsive-display', function (e, datatable, row, showHide, update) {
+            console.log(row.column(8));
+        });
 
         // Add event listener for opening and closing details
         sel_table.find('tbody').on('click', 'td.details-control', function () {
