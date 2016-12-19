@@ -38,13 +38,20 @@ class DashboardController extends Controller
             return view('welcome');
         }
 
+        $max_total = $this->bid->getMaxBidsAmount();
+        $cur_total = $this->bid->getCurBidsAmount();
+        $mBudget_percentage = ($max_total/auth()->user()->budget)*100;
+        $cBudget_percentage = ($cur_total/auth()->user()->budget)*100;
+
         return view('pages.dashboard',[
             'recently_won' => $this->bid->getRecentlyWon(),
             'won_count' => $this->bid->getWonCount(),
             'won_amount' => $this->bid->getWonAmount(),
             'active_count' => $this->bid->getActiveCount(),
-            'max_total' => $this->bid->getMaxBidsAmount(),
-            'cur_total' => $this->bid->getCurBidsAmount()
+            'max_total' => $max_total,
+            'cur_total' => $cur_total,
+            'mBudget_percentage' => $mBudget_percentage,
+            'cBudget_percentage' => $cBudget_percentage
         ]);
     }
 

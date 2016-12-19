@@ -12,7 +12,10 @@
     <div class="row">
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-aqua">
+            <div class="small-box bg-aqua" data-toggle="tooltip" data-placement="bottom"
+                 title="<h4 class='text-success'>Active Bids:</h4>
+                 <p>This widget shows the total of active bids. Auctions on these bids could have ended.</p>"
+            >
                 <div class="inner">
                     <h3>{{$active_count}}</h3>
 
@@ -29,7 +32,10 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-green">
+            <div class="small-box bg-green" data-toggle="tooltip" data-placement="bottom"
+                 title="<h4 class='text-success'>Won Items:</h4>
+                 <p>This widget shows how many won bids from the beginning of time. Also gives you a Total amount spent.</p>"
+            >
                 <div class="inner">
                     <h3>{{$won_count}} <span style="font-size: 19px">(${{$won_amount}})</span></h3>
 
@@ -46,28 +52,33 @@
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
-            <div class="small-box bg-yellow">
+            <div class="small-box {{($cBudget_percentage >= 75 ? 'bg-red' : 'bg-orange')}}" data-toggle="tooltip" data-placement="bottom"
+                 title="<h4 class='text-success'>Current Totals <small>vs</small> Budget:</h4>
+                 <p>This widget shows you where you are with Current Bids vs your budget. 75% or more will turn red in color.</p>"
+            >
                 <div class="inner">
-                    <h3>${{$cur_total}}</h3>
+                    <h3>${{$cur_total}} <small>{{($cBudget_percentage >= 75 ? 'Warning!' : '')}}</small></h3>
 
-                    <p>Current Bids Total</p>
+                    <p>{{$cBudget_percentage}}% of ${{auth()->user()->budget}}</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-money"></i>
                 </div>
-                <a href="#" class="small-box-footer">
-                    More info <i class="fa fa-arrow-circle-right"></i>
+                <a href="/profile" class="small-box-footer">
+                    Change Budget <i class="fa fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
         <!-- ./col -->
         <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box {{(($max_total/auth()->user()->budget)*100 >= 75 ? 'bg-red' : 'bg-purple')}}">
+            <div class="small-box {{($mBudget_percentage >= 75 ? 'bg-red' : 'bg-purple')}}" data-toggle="tooltip" data-placement="bottom"
+                 title="<h4 class='text-success'>Max Totals <small>vs</small> Budget:</h4>
+                 <p>This widget shows you where you are with Max Bids vs your budget. 75% or more will turn red in color.</p>"
+            >
                 <div class="inner">
-                    <h3>${{$max_total}} <small>{{(($max_total/auth()->user()->budget)*100 >= 75 ? 'Warning!' : '')}}</small></h3>
+                    <h3>${{$max_total}} <small>{{($mBudget_percentage >= 75 ? 'Warning!' : '')}}</small></h3>
 
-                    <p>{{($max_total/auth()->user()->budget)*100}}% of ${{auth()->user()->budget}}</p>
+                    <p>{{$mBudget_percentage}}% of ${{auth()->user()->budget}}</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-credit-card-alt"></i>
@@ -171,6 +182,12 @@
             } else {
                 $('#quickEmailForm').submit();
             }
+        });
+
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                html: true
+            })
         })
     });
 </script>

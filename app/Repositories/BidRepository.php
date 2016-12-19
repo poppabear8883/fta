@@ -138,9 +138,11 @@ class BidRepository implements BidRepositoryInterface {
             ->innertext);
 
         $arr = preg_split($pattern, trim($subject));
-        $result = str_replace(' EST', '', $arr[3]);
+        $pattern = '/(?:.*[0-9]{1,2}\:[0-9]{1,2})(?:\s|)(?:am|pm)/i';
+        preg_match($pattern, $arr[3], $result);
+
         $tz = auth()->user()->timezone;
-        $date = Carbon::createFromFormat('F jS, Y g:i A', $result, $tz)
+        $date = Carbon::createFromFormat('F jS, Y g:i A', $result[0], $tz)
             ->setTimezone($tz)
             ->format('Y-m-d H:i:s');
         return $date;
@@ -185,9 +187,18 @@ class BidRepository implements BidRepositoryInterface {
                 $keyValuePairs = preg_split($pattern, $item);
 
                 $key = preg_replace('/<\/?b>/', '', $keyValuePairs[0]);
-                $key = str_replace(' Information', '', trim($key));
-                $key = str_replace('Item ', '', trim($key));
-                $key = str_replace(' #', '', trim($key));
+
+                if(str_contains($key, [
+                    ' Description',
+                    ' Information',
+                    ' Location'
+                ])) {
+                    $key = substr(stristr($key, " "), 1);
+                }
+
+                if(str_contains($key, ['Load '])) {
+                    $key = substr(stristr($key, " ", true), 0);
+                }
 
                 if(trim($key) == 'Front Page' || trim($key) == 'Contact') {
                     break;

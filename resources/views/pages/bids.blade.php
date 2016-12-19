@@ -119,7 +119,7 @@
             serverSide: true,
             ajax: '{!! url('dt/data') !!}',
             "order": [[3, "asc"]],
-            "iDisplayLength": 25,
+            "iDisplayLength": 10,
             "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 setInterval(function () {
                     var now = new moment();
