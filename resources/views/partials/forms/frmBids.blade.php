@@ -1,7 +1,9 @@
 <div class="row">
-    <div class="pull-right">
-        {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-        <a href="/bids" class="btn btn-default">Done</a>
+    <div class="col-md-12">
+        <div class="pull-right">
+            {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+            <a href="/bids" class="btn btn-default">Done</a>
+        </div>
     </div>
 </div>
 
@@ -50,8 +52,10 @@
 </div>
 
 <div class="row">
-    <div class="pull-right">
-        {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-        <a href="/bids" class="btn btn-default">Done</a>
+    <div class="col-md-12">
+        <div class="pull-right">
+            {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
+            <a href="/bids" class="btn btn-default">Done</a>
+        </div>
     </div>
 </div>

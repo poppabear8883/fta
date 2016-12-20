@@ -1,5 +1,11 @@
 @extends('layouts.v2')
+@section('page_header')
+    Dashboard
+@endsection
 
+@section('page_header_description')
+    Shows statistics and has widget for quickly accessing most used areas!
+@endsection
 @section('content')
     @include('partials.alerts.errors')
 

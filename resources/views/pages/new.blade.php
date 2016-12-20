@@ -1,5 +1,11 @@
 @extends('layouts.v2')
+@section('page_header')
+    New Bid Item
+@endsection
 
+@section('page_header_description')
+    You can use this form to create a NEW active bid.! Check all fields, then click Save.
+@endsection
 @section('content')
     @include('partials.alerts.errors')
 
@@ -9,11 +15,18 @@
         </div>
     @endif
 
-    {!! Form::open(['route' => 'bids.store']) !!}
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">Create New Bid</h3>
+        </div>
+        <div class="box-body">
+            {!! Form::open(['route' => 'bids.store']) !!}
 
-    @include('partials.forms.frmBids')
+            @include('partials.forms.frmBids')
 
-    {!! Form::close() !!}
+            {!! Form::close() !!}
+        </div>
+    </div>
 @endsection
 
 @push('scripts')

@@ -42,7 +42,7 @@ class BidController extends Controller
      */
     public function create()
     {
-        return view('new');
+        return view('pages.new');
     }
 
     public function createPost(Request $request) {
@@ -61,7 +61,7 @@ class BidController extends Controller
             $name = $match[0];
         }
 
-        return view('new', [
+        return view('pages.new', [
             'data' => $data,
             'url' => $url,
             'cbid' => $html->getRemoteCurBid(),
@@ -130,7 +130,7 @@ class BidController extends Controller
     {
         $bid = Bid::findOrFail($id);
 
-        return view('edit')->withBid($bid);
+        return view('pages.edit')->withBid($bid);
     }
 
     /**

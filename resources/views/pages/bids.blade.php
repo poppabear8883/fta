@@ -17,7 +17,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-default">
+            <div class="box box-success">
                 <div class="box-header">
                     <h3 class="box-title">Add New Bid</h3>
                 </div>
@@ -40,7 +40,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-default">
+            <div class="box box-primary">
                 <div class="box-header">
                     <h3 class="box-title">Active Bids</h3>
                 </div>
@@ -49,16 +49,14 @@
 
                     <table id="bids-table" class="table table-striped dt-responsive nowrap dataTable no-footer"
                            cellspacing="0"
-                           width="100%"
                             >
                         <thead>
                         <tr>
-                            <th class="desktop"></th>
+                            {{--<th class="desktop"></th>--}}
                             <th class="never">id</th>
                             <th class="never">url</th>
                             <th class="min-tablet-l">Ends</th>
                             <th class="all">Name</th>
-                            <th class="desktop">Location</th>
                             <th class="desktop">Current Bid</th>
                             <th class="desktop">Max Bid</th>
                             <th class="min-tablet-l">Tools</th>
@@ -77,12 +75,12 @@
 
 @push('scripts')
 <script>
-    function format(d) {
+    /*function format(d) {
         return '<div class="alert alert-danger text-center"><strong>ONLY use this frame for information and to place bid!</strong></div>' +
                 '<div class="panel panel-default">' +
                 '<div class="panel-body" id="pnlFrame"></div>' +
                 '</div>';
-    }
+    }*/
 
     $(document).ready(function () {
         var sel_table = $('#bids-table');
@@ -118,7 +116,7 @@
             processing: true,
             serverSide: true,
             ajax: '{!! url('dt/data') !!}',
-            "order": [[3, "asc"]],
+            "order": [[2, "asc"]],
             "iDisplayLength": 10,
             "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 setInterval(function () {
@@ -141,23 +139,23 @@
             },
             "columnDefs": [
                 {
-                    "targets": 3,
+                    "targets": 2,
                     "render": function (data, type, row, meta) {
                         return new moment(data).format('lll');
                     }
                 },
                 {
-                    "targets": 4,
+                    "targets": 3,
                     "render": function (data, type, row, meta) {
 
                         var itemUrl = row['url'];
-                        if (data.length > 15) data = data.substring(0, 15) + ' ...';
+                        if (data.length > 20) data = data.substring(0, 20) + ' ...';
                         return '<a href="' + itemUrl + '" target="_blank">' + data + '</a>';
                         //return data;
                     }
                 },
                 {
-                    "targets": 8,
+                    "targets": 6,
                     "render": function (data, type, row, meta) {
                         var id = row['id'];
 
@@ -184,11 +182,6 @@
                 }
             ],
             "columns": [{
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            }, {
                 "data": "id",
                 "visible": false
             }, {
@@ -199,8 +192,6 @@
             }, {
                 "data": "name"
             }, {
-                "data": "location"
-            }, {
                 "data": "cur_bid"
             }, {
                 "data": "max_bid"
@@ -210,11 +201,7 @@
 
         table.buttons().container().appendTo('#button_tools');
 
-        table.on('responsive-display', function (e, datatable, row, showHide, update) {
-            console.log(row.column(8));
-        });
-
-        // Add event listener for opening and closing details
+        /*// Add event listener for opening and closing details
         sel_table.find('tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
@@ -230,7 +217,7 @@
                 tr.addClass('shown');
                 $('#pnlFrame').html('<iframe src="' + url + '" width="100%" height="600px"></iframe>');
             }
-        });
+        });*/
     });
 
     /**/

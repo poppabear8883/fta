@@ -26,7 +26,7 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        return view('profile',['user' => $user]);
+        return view('pages.profile',['user' => $user]);
     }
 
     /**

@@ -30,7 +30,7 @@ class WonController extends Controller
     public function index()
     {
         $active = $this->repo->getActiveCount();
-        return view('won',['active' => $active]);
+        return view('pages.won',['active' => $active]);
     }
 
     /**
