@@ -45,21 +45,89 @@
                     <h3 class="box-title">Active Bids</h3>
                 </div>
                 <div class="box-body">
-                    <div id="button_tools" style="margin-bottom: 15px"></div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="well well-sm">
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <button type="button" class="btn btn-xs btn-success" disabled>
+                                            <i class="glyphicon glyphicon-check"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-11">
+                                        Use this button to mark the selected bid as <strong>WON</strong>!
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <button type="button" class="btn btn-xs btn-primary" disabled>
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-11">
+                                        Use this button to <strong>EDIT</strong> the selected bid!
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-1">
+                                        <button type="button" class="btn btn-xs btn-danger" disabled>
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-11">
+                                        Use this button to <strong>DELETE</strong> the selected bid!
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <form method="POST" action="" accept-charset="UTF-8" id="frmWon">
+                                        <input name="_method" type="hidden" value="PATCH">
+                                        <input name="_token" type="hidden" value="{{csrf_token()}}">
+                                        <input name="won" type="hidden" value="1">
+                                        <button type="submit" class="btn btn-success disabled" id="btnWon">
+                                            <i class="glyphicon glyphicon-check"></i>
+                                            <span class="hidden-xs">Mark as Won</span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a href="#" class="btn btn-primary disabled" id="btnEdit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                        <span class="hidden-xs">Edit Selected</span>
+                                    </a>
+                                </div>
+                                <div class="col-xs-4">
+                                    <form method="POST" action="" accept-charset="UTF-8" id="frmDelete">
+                                        <input name="_method" type="hidden" value="DELETE">
+                                        <input name="_token" type="hidden" value="{{csrf_token()}}">
+                                        <button type="submit" class="btn btn-danger disabled" id="btnDelete">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            <span class="hidden-xs">Delete Selected</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="button_tools" style="margin-bottom: 15px"></div>
+                        </div>
+                    </div>
 
                     <table id="bids-table" class="table table-striped dt-responsive nowrap dataTable no-footer"
                            cellspacing="0"
                             >
                         <thead>
                         <tr>
-                            {{--<th class="desktop"></th>--}}
                             <th class="never">id</th>
                             <th class="never">url</th>
                             <th class="min-tablet-l">Ends</th>
                             <th class="all">Name</th>
                             <th class="desktop">Current Bid</th>
                             <th class="desktop">Max Bid</th>
-                            <th class="min-tablet-l">Tools</th>
                         </tr>
                         </thead>
                     </table>
@@ -75,18 +143,18 @@
 
 @push('scripts')
 <script>
-    /*function format(d) {
-        return '<div class="alert alert-danger text-center"><strong>ONLY use this frame for information and to place bid!</strong></div>' +
-                '<div class="panel panel-default">' +
-                '<div class="panel-body" id="pnlFrame"></div>' +
-                '</div>';
-    }*/
-
     $(document).ready(function () {
         var sel_table = $('#bids-table');
-
         var table = sel_table.DataTable({
+            select: {
+                style: 'single'
+            },
             dom: 'Blfrtip',
+            processing: true,
+            serverSide: true,
+            ajax: '{!! url('dt/data') !!}',
+            "order": [[2, "asc"]],
+            "iDisplayLength": 10,
             responsive: {
                 details: {
                     display: $.fn.dataTable.Responsive.display.childRowImmediate,
@@ -97,7 +165,7 @@
                 buttons: [
                     {
                         extend: 'print',
-                        className: 'btn-sm btn-primary',
+                        className: 'btn-default',
                         exportOptions: {
                             columns: ':visible'
                         },
@@ -113,29 +181,35 @@
                     }
                 ]
             },
-            processing: true,
-            serverSide: true,
-            ajax: '{!! url('dt/data') !!}',
-            "order": [[2, "asc"]],
-            "iDisplayLength": 10,
             "rowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 setInterval(function () {
                     var now = new moment();
                     var data = new moment(aData['datetime']);
                     var dif = data.diff(now, 'hours');
                     var skip = $(nRow).hasClass('tablerow-danger');
+                    var selected = $(nRow).hasClass('selected');
 
-                    if (dif == 0 && !skip) {
+                    if (selected) {
+                        $(nRow).removeClass('tablerow-danger');
+                        $(nRow).removeClass('tablerow-caution');
+                    }
+
+                    if (selected && data < now) {
+                        $('#btnWon').removeClass('disabled');
+                    } else {
+                        $('#btnWon').addClass('disabled');
+                    }
+
+                    if (dif == 0 && !skip && !selected) {
                         $(nRow).removeClass('tablerow-danger');
                         $(nRow).addClass('tablerow-caution');
                     }
 
-                    if (data < now && !skip) {
+                    if (data < now && !skip && !selected) {
                         $(nRow).removeClass('tablerow-caution');
                         $(nRow).addClass('tablerow-danger');
-                        $(nRow).find('#btnWon' + aData['id']).removeClass('hide');
                     }
-                }, 1000);
+                }, 500);
             },
             "columnDefs": [
                 {
@@ -151,33 +225,6 @@
                         var itemUrl = row['url'];
                         if (data.length > 20) data = data.substring(0, 20) + ' ...';
                         return '<a href="' + itemUrl + '" target="_blank">' + data + '</a>';
-                        //return data;
-                    }
-                },
-                {
-                    "targets": 6,
-                    "render": function (data, type, row, meta) {
-                        var id = row['id'];
-
-                        return '<div class="row">' +
-                                '<div class="col-xs-1">' +
-                                '<form method="POST" action="bid/' + id + '/won" accept-charset="UTF-8">' +
-                                '<input name="_method" type="hidden" value="PATCH">' +
-                                '<input name="_token" type="hidden" value="{{csrf_token()}}">' +
-                                '<input name="won" type="hidden" value="1">' +
-                                '<button type="submit" class="btn btn-xs btn-success hide" id="btnWon' + id + '">' +
-                                '<i class="glyphicon glyphicon-check"></i></button>' +
-                                '</form>' +
-                                '</div><div class="col-xs-1">' +
-                                '<a href="bids/' + id + '/edit" class="btn btn-xs btn-primary" id="btnEdit' + id + '">' +
-                                '<i class="glyphicon glyphicon-pencil"></i></a>' +
-                                '</div><div class="col-xs-1">' +
-                                '<form method="POST" action="bids/' + id + '" accept-charset="UTF-8">' +
-                                '<input name="_method" type="hidden" value="DELETE">' +
-                                '<input name="_token" type="hidden" value="{{csrf_token()}}">' +
-                                '<button type="submit" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-trash"></i></button>' +
-                                '</form>' +
-                                '</div></div>';
                     }
                 }
             ],
@@ -195,29 +242,55 @@
                 "data": "cur_bid"
             }, {
                 "data": "max_bid"
+            }]
+        });
 
-            }, {}]
+        $('#btnWon').on('click', function (e) {
+            e.preventDefault();
+            var disabled = $(this).hasClass('disabled');
+
+            if (!disabled) {
+                $('#frmWon').submit()
+            }
+        });
+        $('#btnEdit').on('click', function (e) {
+            var disabled = $(this).hasClass('disabled');
+
+            if (disabled) {
+                e.preventDefault();
+            }
+        });
+        $('#btnDelete').on('click', function (e) {
+            e.preventDefault();
+            var disabled = $(this).hasClass('disabled');
+
+            if (!disabled) {
+                $('#frmDelete').submit()
+            }
         });
 
         table.buttons().container().appendTo('#button_tools');
 
-        /*// Add event listener for opening and closing details
-        sel_table.find('tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-            var url = row.data().url;
+        table
+                .on('select', function (e, dt, type, indexes) {
+                    var rowData = table.rows(indexes).data().toArray();
+                    var data = rowData[0];
+                    var btnEdit = $('#btnEdit');
 
-            if (row.child.isShown()) {
-                $('#pnlFrame').html('');
-                row.child.hide();
-                tr.removeClass('shown');
-            }
-            else {
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-                $('#pnlFrame').html('<iframe src="' + url + '" width="100%" height="600px"></iframe>');
-            }
-        });*/
+                    btnEdit.removeClass('disabled');
+                    btnEdit.attr('href', 'bids/' + data.id + '/edit');
+                    $('#btnDelete').removeClass('disabled');
+                    $('#frmWon').attr('action', 'bid/' + data.id + '/won');
+                    $('#frmDelete').attr('action', 'bids/' + data.id);
+                })
+                .on('deselect', function (e, dt, type, indexes) {
+                    var btnEdit = $('#btnEdit');
+                    btnEdit.addClass('disabled');
+                    btnEdit.attr('href', '#');
+                    $('#btnDelete').addClass('disabled');
+                    $('#frmWon').attr('action', '');
+                    $('#frmDelete').attr('action', '');
+                });
     });
 
     /**/

@@ -9,7 +9,7 @@ window.moment = require('moment');
  */
 
 window.$ = window.jQuery = require('jquery');
-require('jquery-migrate');
+//require('jquery-migrate');
 
 require('bootstrap-sass');
 
@@ -50,7 +50,7 @@ require( 'datatables.net-buttons/js/buttons.colVis' )(window, $);
 require( 'datatables.net-buttons/js/buttons.html5' )(window, $);
 require( 'datatables.net-buttons/js/buttons.flash' )(window, $);
 require( 'datatables.net-buttons/js/buttons.print' )(window, $);
-
+require('datatables.net-select/js/dataTables.select')(window, $);
 /**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean
