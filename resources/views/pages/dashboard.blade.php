@@ -7,14 +7,6 @@
     Shows statistics and has widget for quickly accessing most used areas!
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
-
     <div class="row">
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->

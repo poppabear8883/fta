@@ -20,6 +20,7 @@ class CalendarController extends Controller
     }
 
     public function getEvents() {
+        // todo: Extract to CalendarRepository, include Interface methods.
         $uid = auth()->user()->id;
         $tz = auth()->user()->timezone;
 

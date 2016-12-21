@@ -7,14 +7,6 @@
     You can use this form to create a NEW active bid.! Check all fields, then click Save.
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
-
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Create New Bid</h3>

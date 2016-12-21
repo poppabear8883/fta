@@ -3,11 +3,13 @@
 namespace App\Repositories;
 
 use App\Bid;
+use App\User;
 use Carbon\Carbon;
 use Yajra\Datatables\Datatables;
 use Yangqi\Htmldom\Htmldom;
 
-class BidRepository implements BidRepositoryInterface {
+class BidRepository implements BidRepositoryInterface
+{
 
     private $html;
 
@@ -15,8 +17,11 @@ class BidRepository implements BidRepositoryInterface {
 
     private $remoteForm;
 
-    public function __construct() {
+    private $user;
 
+    public function __construct(User $user)
+    {
+        $this->user = $user;
     }
 
     /**
@@ -24,20 +29,23 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getActiveCount()
     {
-        return count(Bid::where([
-            ['user_id', '=', auth()->user()->id],
-            ['won', '=', '0']
-        ])->get());
+        return count($this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '0')
+            ->get());
     }
 
     /**
      * @return mixed
      */
-    public function getWonCount() {
-        return count(Bid::where([
-            ['user_id', '=', auth()->user()->id],
-            ['won', '=', '1']
-        ])->get());
+    public function getWonCount()
+    {
+        return count($this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '1')
+            ->get());
     }
 
     /**
@@ -47,13 +55,13 @@ class BidRepository implements BidRepositoryInterface {
     {
         $amount = 0;
 
-        $bids = Bid::select(['cur_bid'])
-            ->where([
-                ['user_id', '=', auth()->user()->id],
-                ['won', '=', '0']
-            ])->get()->pluck('cur_bid');
+        $bids = $this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '0')
+            ->get()->pluck('cur_bid');
 
-        foreach($bids as $b) {
+        foreach ($bids as $b) {
             $amount += $b;
         }
 
@@ -63,32 +71,34 @@ class BidRepository implements BidRepositoryInterface {
     /**
      * @return int
      */
-    public function getMaxBidsAmount() {
+    public function getMaxBidsAmount()
+    {
         $amount = 0;
 
-        $bids = Bid::select(['max_bid'])
-            ->where([
-                ['user_id', '=', auth()->user()->id],
-                ['won', '=', '0']
-            ])->get()->pluck('max_bid');
+        $bids = $this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '0')
+            ->get()->pluck('max_bid');
 
-        foreach($bids as $b) {
+        foreach ($bids as $b) {
             $amount += $b;
         }
 
         return $amount;
     }
 
-    public function getWonAmount() {
+    public function getWonAmount()
+    {
         $amount = 0;
 
-        $bids = Bid::select(['cur_bid'])
-            ->where([
-                ['user_id', '=', auth()->user()->id],
-                ['won', '=', '1']
-            ])->get()->pluck('cur_bid');
+        $bids = $this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '1')
+            ->get()->pluck('cur_bid');
 
-        foreach($bids as $b) {
+        foreach ($bids as $b) {
             $amount += $b;
         }
 
@@ -98,12 +108,26 @@ class BidRepository implements BidRepositoryInterface {
     /**
      * @return mixed
      */
-    public function getDataTable() {
-        $bids = Bid::where([
-            ['user_id', '=', auth()->user()->id],
-            ['won', '=', 0]
-        ])->get();
-        return Datatables::of($bids)->make(true);
+    public function getDataTable()
+    {
+        $bids = $this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '0')
+            ->get();
+
+        return Datatables::of($bids)
+            ->addColumn('action', function ($bid) {
+                $tz = auth()->user()->timezone;
+                $datetime = Carbon::parse($bid->datetime)->setTimezone($tz);
+                $now = Carbon::now($tz);
+                $ended = false;
+                if($datetime >= $now) {
+                    $ended = true;
+                }
+                return view('partials.datatables.actions_column', compact(['bid','ended']))->render();
+            })
+            ->make(true);
     }
 
     /**
@@ -111,25 +135,36 @@ class BidRepository implements BidRepositoryInterface {
      */
     public function getWonDataTable()
     {
-        $bids = Bid::where([
-            ['user_id', '=', auth()->user()->id],
-            ['won', '=', 1]
-        ])->get();
+        $bids = $this->user
+            ->find(auth()->user()->id)
+            ->bids()
+            ->where('won', '1')
+            ->get();
         return Datatables::of($bids)->make(true);
     }
 
-    public function Htmldom($url) {
+    /**
+     * todo: Extract to BidFtaHtmlDomRepository::class with interface
+     * Creates a new instance of Htmldom initialized with the URL
+     * @param $url
+     * @return $this
+     */
+    public function Htmldom($url)
+    {
         $this->html = new Htmldom($url);
+        // todo: extract form and datetable to seperate methods.
         $this->remoteForm = $this->html->find('form[name=bidform]')[0];
         $this->remoteDateTable = $this->html->find('table[id=TableTop]')[0];
         return $this;
     }
 
-    public function getRemoteCurBid() {
+    public function getRemoteCurBid()
+    {
         return $this->remoteForm->children(1)->children(1)->children(5)->innertext;
     }
 
-    public function getRemoteEndDate() {
+    public function getRemoteEndDate()
+    {
         $pattern = '/\s?-\s?/';
 
         $subject = strip_tags($this->remoteDateTable
@@ -141,6 +176,7 @@ class BidRepository implements BidRepositoryInterface {
         $pattern = '/(?:.*[0-9]{1,2}\:[0-9]{1,2})(?:\s|)(?:am|pm)/i';
         preg_match($pattern, $arr[3], $result);
 
+        // todo: This repository should NOT care about any Models
         $tz = auth()->user()->timezone;
         $date = Carbon::createFromFormat('F jS, Y g:i A', $result[0], $tz)
             ->setTimezone($tz)
@@ -148,7 +184,8 @@ class BidRepository implements BidRepositoryInterface {
         return $date;
     }
 
-    public function getRemoteLocation() {
+    public function getRemoteLocation()
+    {
         $pattern = '/\s?-\s?/';
 
         $subject = strip_tags($this->remoteDateTable
@@ -168,7 +205,8 @@ class BidRepository implements BidRepositoryInterface {
      * @param $url
      * @return array
      */
-    public function getRemoteData() {
+    public function getRemoteData()
+    {
         $pattern = '/<br\s?\/?>/';
         $subject = $this->remoteForm
             ->children(1)
@@ -183,12 +221,12 @@ class BidRepository implements BidRepositoryInterface {
         $pattern = '/\s?:\s?/';
 
         foreach ($result as $item) {
-            if($item != "") {
+            if ($item != "") {
                 $keyValuePairs = preg_split($pattern, $item);
 
                 $key = preg_replace('/<\/?b>/', '', $keyValuePairs[0]);
 
-                if(str_contains($key, [
+                if (str_contains($key, [
                     ' Description',
                     ' Information',
                     ' Location'
@@ -196,11 +234,11 @@ class BidRepository implements BidRepositoryInterface {
                     $key = substr(stristr($key, " "), 1);
                 }
 
-                if(str_contains($key, ['Load '])) {
+                if (str_contains($key, ['Load '])) {
                     $key = substr(stristr($key, " ", true), 0);
                 }
 
-                if(trim($key) == 'Front Page' || trim($key) == 'Contact') {
+                if (trim($key) == 'Front Page' || trim($key) == 'Contact') {
                     break;
                 }
 
@@ -216,12 +254,13 @@ class BidRepository implements BidRepositoryInterface {
         return array_collapse($itemArray);
     }
 
-    public function getRemoteDetails() {
+    public function getRemoteDetails()
+    {
         $data = $this->getRemoteData();
         $details = '';
 
-        foreach($data as $k => $v) {
-            $details .= $k .': '.$v."\n";
+        foreach ($data as $k => $v) {
+            $details .= $k . ': ' . $v . "\n";
         }
 
         return $details;
@@ -231,8 +270,8 @@ class BidRepository implements BidRepositoryInterface {
     {
         $uid = auth()->user()->id;
         $bids = Bid::where('user_id', $uid)
-        ->where('won', 1)
-        ->orderBy('datetime', 'desc')
+            ->where('won', 1)
+            ->orderBy('datetime', 'desc')
             ->limit(5)->get();
 
         return $bids;

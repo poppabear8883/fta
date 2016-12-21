@@ -7,14 +7,7 @@
     Shows a data table of all your active bids. You can add, delete, edit and mark your bids as won!
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
-
+    <!-- todo: should extract parts top artials, also create views for DataTable columns ie: the actions_column -->
     <div class="row">
         <div class="col-md-12">
             <div class="box box-success">
@@ -46,72 +39,6 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-xs-12">
-                            <div class="well well-sm">
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <button type="button" class="btn btn-xs btn-success" disabled>
-                                            <i class="glyphicon glyphicon-check"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-xs-11">
-                                        Use this button to mark the selected bid as <strong>WON</strong>!
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <button type="button" class="btn btn-xs btn-primary" disabled>
-                                            <i class="glyphicon glyphicon-pencil"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-xs-11">
-                                        Use this button to <strong>EDIT</strong> the selected bid!
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-1">
-                                        <button type="button" class="btn btn-xs btn-danger" disabled>
-                                            <i class="glyphicon glyphicon-trash"></i>
-                                        </button>
-                                    </div>
-                                    <div class="col-xs-11">
-                                        Use this button to <strong>DELETE</strong> the selected bid!
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <form method="POST" action="" accept-charset="UTF-8" id="frmWon">
-                                        <input name="_method" type="hidden" value="PATCH">
-                                        <input name="_token" type="hidden" value="{{csrf_token()}}">
-                                        <input name="won" type="hidden" value="1">
-                                        <button type="submit" class="btn btn-success disabled" id="btnWon">
-                                            <i class="glyphicon glyphicon-check"></i>
-                                            <span class="hidden-xs">Mark as Won</span>
-                                        </button>
-                                    </form>
-                                </div>
-                                <div class="col-xs-4">
-                                    <a href="#" class="btn btn-primary disabled" id="btnEdit">
-                                        <i class="glyphicon glyphicon-pencil"></i>
-                                        <span class="hidden-xs">Edit Selected</span>
-                                    </a>
-                                </div>
-                                <div class="col-xs-4">
-                                    <form method="POST" action="" accept-charset="UTF-8" id="frmDelete">
-                                        <input name="_method" type="hidden" value="DELETE">
-                                        <input name="_token" type="hidden" value="{{csrf_token()}}">
-                                        <button type="submit" class="btn btn-danger disabled" id="btnDelete">
-                                            <i class="glyphicon glyphicon-trash"></i>
-                                            <span class="hidden-xs">Delete Selected</span>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
                         <div class="col-md-12">
                             <div id="button_tools" style="margin-bottom: 15px"></div>
                         </div>
@@ -128,6 +55,7 @@
                             <th class="all">Name</th>
                             <th class="desktop">Current Bid</th>
                             <th class="desktop">Max Bid</th>
+                            <th class="desktop">Actions</th>
                         </tr>
                         </thead>
                     </table>
@@ -146,9 +74,6 @@
     $(document).ready(function () {
         var sel_table = $('#bids-table');
         var table = sel_table.DataTable({
-            select: {
-                style: 'single'
-            },
             dom: 'Blfrtip',
             processing: true,
             serverSide: true,
@@ -187,25 +112,13 @@
                     var data = new moment(aData['datetime']);
                     var dif = data.diff(now, 'hours');
                     var skip = $(nRow).hasClass('tablerow-danger');
-                    var selected = $(nRow).hasClass('selected');
 
-                    if (selected) {
-                        $(nRow).removeClass('tablerow-danger');
-                        $(nRow).removeClass('tablerow-caution');
-                    }
-
-                    if (selected && data < now) {
-                        $('#btnWon').removeClass('disabled');
-                    } else {
-                        $('#btnWon').addClass('disabled');
-                    }
-
-                    if (dif == 0 && !skip && !selected) {
+                    if (dif == 0 && !skip) {
                         $(nRow).removeClass('tablerow-danger');
                         $(nRow).addClass('tablerow-caution');
                     }
 
-                    if (data < now && !skip && !selected) {
+                    if (data < now && !skip) {
                         $(nRow).removeClass('tablerow-caution');
                         $(nRow).addClass('tablerow-danger');
                     }
@@ -229,68 +142,28 @@
                 }
             ],
             "columns": [{
-                "data": "id",
-                "visible": false
+                data: 'id',
+                visible: false
             }, {
-                "data": "url",
-                "visible": false
+                data: 'url',
+                visible: false
             }, {
-                "data": "datetime"
+                data: 'datetime'
             }, {
-                "data": "name"
+                data: 'name'
             }, {
-                "data": "cur_bid"
+                data: 'cur_bid'
             }, {
-                "data": "max_bid"
+                data: 'max_bid'
+            }, {
+                data: 'action',
+                name: 'action',
+                orderable: false,
+                searchable: false
             }]
         });
 
-        $('#btnWon').on('click', function (e) {
-            e.preventDefault();
-            var disabled = $(this).hasClass('disabled');
-
-            if (!disabled) {
-                $('#frmWon').submit()
-            }
-        });
-        $('#btnEdit').on('click', function (e) {
-            var disabled = $(this).hasClass('disabled');
-
-            if (disabled) {
-                e.preventDefault();
-            }
-        });
-        $('#btnDelete').on('click', function (e) {
-            e.preventDefault();
-            var disabled = $(this).hasClass('disabled');
-
-            if (!disabled) {
-                $('#frmDelete').submit()
-            }
-        });
-
         table.buttons().container().appendTo('#button_tools');
-
-        table
-                .on('select', function (e, dt, type, indexes) {
-                    var rowData = table.rows(indexes).data().toArray();
-                    var data = rowData[0];
-                    var btnEdit = $('#btnEdit');
-
-                    btnEdit.removeClass('disabled');
-                    btnEdit.attr('href', 'bids/' + data.id + '/edit');
-                    $('#btnDelete').removeClass('disabled');
-                    $('#frmWon').attr('action', 'bid/' + data.id + '/won');
-                    $('#frmDelete').attr('action', 'bids/' + data.id);
-                })
-                .on('deselect', function (e, dt, type, indexes) {
-                    var btnEdit = $('#btnEdit');
-                    btnEdit.addClass('disabled');
-                    btnEdit.attr('href', '#');
-                    $('#btnDelete').addClass('disabled');
-                    $('#frmWon').attr('action', '');
-                    $('#frmDelete').attr('action', '');
-                });
     });
 
     /**/

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
+todo: Extract parts to partials, should do this for all blade templates.
 -->
 <html>
 <head>
@@ -23,6 +22,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script>
+        window.Laravel = <?php echo json_encode([
+                'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -223,7 +228,7 @@ desired effect
             <ul class="sidebar-menu">
                 <li class="header">Navigation</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+                <li><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
                 <li><a href="/bids"><i class="fa fa-tags"></i> <span>Active Bids</span></a></li>
                 <li class="treeview">
                     <a href="#"><i class="fa fa-bookmark-o"></i> <span>Won Bids</span>
@@ -250,14 +255,17 @@ desired effect
                 @yield('page_header')
                 <small>@yield('page_header_description')</small>
             </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-                <li class="active">Here</li>
-            </ol>
         </section>
 
         <!-- Main content -->
         <section class="content">
+            @include('partials.alerts.errors')
+
+            @if(Session::has('flash_message'))
+                <div class="alert alert-success">
+                    {{ Session::get('flash_message') }}
+                </div>
+            @endif
 
             @yield('content')
 

@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,6 +45,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof TokenMismatchException){
+            //redirect to a form. Here is an example of how I handle mine
+            return redirect($request->fullUrl())
+                ->with('csrf_error',"Opps! Your session has expired. We have renewed your session. Please try again");
+        }
+
         return parent::render($request, $exception);
     }
 

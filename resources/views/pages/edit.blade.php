@@ -7,13 +7,6 @@
     You can use this form to make changes to an active bid. Typically used to update Current and Max Bids!
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Editing {{$bid->name}}</h3>

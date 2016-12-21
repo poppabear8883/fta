@@ -7,13 +7,6 @@
     Edit your profile settings here including your budget!
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Profile</h3>

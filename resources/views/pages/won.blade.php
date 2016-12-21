@@ -7,14 +7,7 @@
     Shows a data table of all your Won Bids from the beginning of time!
 @endsection
 @section('content')
-    @include('partials.alerts.errors')
-
-    @if(Session::has('flash_message'))
-        <div class="alert alert-success">
-            {{ Session::get('flash_message') }}
-        </div>
-    @endif
-
+    <!-- todo: fix up this table, should include edit action -->
     <div class="box box-primary">
         <div class="box-header">
             <h3 class="box-title">Won Bids</h3>
@@ -120,24 +113,24 @@
                 }
             ],
             "columns": [{
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
+                className: 'details-control',
+                orderable: false,
+                data: null,
+                defaultContent: ''
             }, {
-                "data": "id",
-                "visible": false
+                data: 'id',
+                visible: false
             }, {
-                "data": "url",
-                "visible": false
+                data: 'url',
+                visible: false
             }, {
-                "data": "datetime"
+                data: 'datetime'
             }, {
-                "data": "name"
+                data: 'name'
             }, {
-                "data": "location"
+                data: 'location'
             }, {
-                "data": "cur_bid"
+                data: 'cur_bid'
             }]
         });
 
