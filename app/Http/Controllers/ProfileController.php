@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Repositories\UserRepositoryInterface;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    private $userRepository;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $user)
     {
         $this->middleware('auth');
+        $this->userRepository = $user;
     }
 
     /**
@@ -24,8 +27,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-
+        $user = $this->userRepository->findOrFail(auth()->user()->id);
         return view('pages.profile',['user' => $user]);
     }
 
@@ -37,8 +39,6 @@ class ProfileController extends Controller
      */
     public function update($id, Request $request)
     {
-        $user = User::findOrFail($id);
-
         $this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
@@ -48,8 +48,7 @@ class ProfileController extends Controller
         ]);
 
         $input = $request->all();
-
-        $user->fill($input)->save();
+        $this->userRepository->update($id, $input);
 
         \Session::flash('flash_message', 'Successful!');
 

@@ -14,7 +14,7 @@ class DashboardController extends Controller
      * Bid Repository Dependency
      * @var UserBidsRepositoryInterface
      */
-    private $bid;
+    private $userBidsRepository;
 
     /**
      * Create a new controller instance.
@@ -23,7 +23,7 @@ class DashboardController extends Controller
      */
     public function __construct(UserBidsRepositoryInterface $bid)
     {
-        $this->bid = $bid;
+        $this->userBidsRepository = $bid;
         $this->middleware('auth')->except('index');
     }
 
@@ -38,16 +38,16 @@ class DashboardController extends Controller
             return view('welcome');
         }
 
-        $max_total = $this->bid->getMaxBidsAmount();
-        $cur_total = $this->bid->getCurBidsAmount();
+        $max_total = $this->userBidsRepository->getMaxBidsAmount();
+        $cur_total = $this->userBidsRepository->getCurBidsAmount();
         $mBudget_percentage = ($max_total/auth()->user()->budget)*100;
         $cBudget_percentage = ($cur_total/auth()->user()->budget)*100;
 
         return view('pages.dashboard',[
-            'recently_won' => $this->bid->getRecentlyWon(),
-            'won_count' => $this->bid->getWonCount(),
-            'won_amount' => $this->bid->getWonAmount(),
-            'active_count' => $this->bid->getActiveCount(),
+            'recently_won' => $this->userBidsRepository->getRecentlyWon(),
+            'won_count' => $this->userBidsRepository->getWonCount(),
+            'won_amount' => $this->userBidsRepository->getWonAmount(),
+            'active_count' => $this->userBidsRepository->getActiveCount(),
             'max_total' => $max_total,
             'cur_total' => $cur_total,
             'mBudget_percentage' => $mBudget_percentage,

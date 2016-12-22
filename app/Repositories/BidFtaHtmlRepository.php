@@ -3,9 +3,13 @@
 namespace App\Repositories;
 
 use Carbon\Carbon;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Yangqi\Htmldom\Htmldom;
 
 class BidFtaHtmlRepository implements BidFtaHtmlRepositoryInterface {
+
+    use ValidatesRequests;
 
     private $Htmldom;
 
@@ -149,13 +153,17 @@ class BidFtaHtmlRepository implements BidFtaHtmlRepositoryInterface {
         return $details;
     }
 
-    public function remote_data($url, $tz='UTC')
+    public function remote_data(Request $request, $tz='UTC')
     {
-        $html = $this->getFromUrl($url);
+        $this->validate($request, [
+            'itemUrl' => 'required|url'
+        ]);
+
+        $html = $this->getFromUrl($request->get('itemUrl'));
 
         return [
             'data' => $html->Data(),
-            'url' => $url,
+            'url' => $request->get('itemUrl'),
             'cbid' => $html->CurrentBid(),
             'edate' => $html->EndDate($tz),
             'loc' => $html->Location(),

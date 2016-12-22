@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Notifications\UserRegistered;
+use App\Repositories\UserRepositoryInterface;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -31,13 +31,21 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * UserRepository Instance
+     *
+     * @var UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepositoryInterface $user)
     {
         $this->middleware('guest');
+        $this->userRepository = $user;
     }
 
     /**
@@ -66,16 +74,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'bidder_number' => $data['bidder_number'],
-            'phone_number' => $data['phone_number'],
-            'timezone' => $data['timezone'],
-        ]);
-
-        $user->notify(new UserRegistered());
+        $user = $this->userRepository->create($data);
         return $user;
     }
 }

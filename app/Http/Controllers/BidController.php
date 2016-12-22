@@ -10,11 +10,26 @@ use Illuminate\Http\Request;
 class BidController extends Controller
 {
 
-    private $bid;
+    /**
+     * BidRepository Instance
+     *
+     * @var BidRepositoryInterface
+     */
+    private $bidRepository;
 
-    private $ubids;
+    /**
+     * UserBidsRepository Instance
+     *
+     * @var UserBidsRepositoryInterface
+     */
+    private $userBidsRepository;
 
-    private $html;
+    /**
+     * BidftaHtmlRepository Instance
+     *
+     * @var BidFtaHtmlRepositoryInterface
+     */
+    private $bidftaHtmlRepository;
 
 
     /**
@@ -24,9 +39,9 @@ class BidController extends Controller
      */
     public function __construct(BidRepositoryInterface $bid, UserBidsRepositoryInterface $ubids, BidFtaHtmlRepositoryInterface $html)
     {
-        $this->bid = $bid;
-        $this->ubids = $ubids;
-        $this->html = $html;
+        $this->bidRepository = $bid;
+        $this->userBidsRepository = $ubids;
+        $this->bidftaHtmlRepository = $html;
         $this->middleware('auth');
     }
 
@@ -50,13 +65,15 @@ class BidController extends Controller
         return view('pages.new');
     }
 
-    public function createFromHtml(Request $request) {
-        $this->validate($request, [
-            'itemUrl' => 'required|url'
-        ]);
-
-        $data = $this->html->remote_data($request->get('itemUrl'), auth()->user()->timezone);
-
+    /**
+     * Passes remote data from repository to create form
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function createFromHtml(Request $request)
+    {
+        $data = $this->bidftaHtmlRepository->remote_data($request, auth()->user()->timezone);
         return view('pages.new', $data);
     }
 
@@ -67,31 +84,13 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'url' => 'required',
-            'datetime' => 'required',
-            'location' => 'required',
-            'pickup' => 'required',
-            'cur_bid' => 'required'
-        ]);
-
-        $this->bid->store($request);
+        $this->bidRepository
+            ->validateForCreate($request)
+            ->store($request->all());
 
         \Session::flash('flash_message', 'Bid successfully added!');
 
         return redirect('bids.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -102,7 +101,7 @@ class BidController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.edit')->withBid($this->bid->findOrFail($id));
+        return view('pages.edit')->withBid($this->bidRepository->findOrFail($id));
     }
 
     /**
@@ -113,17 +112,9 @@ class BidController extends Controller
      */
     public function update($id, Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'url' => 'required',
-            'datetime' => 'required',
-            'location' => 'required',
-            'pickup' => 'required',
-            'cur_bid' => 'required',
-            'max_bid' => 'required'
-        ]);
-
-        $this->bid->update($id, $request);
+        $this->bidRepository
+            ->validateForUpdate($request)
+            ->update($id, $request->all());
 
         \Session::flash('flash_message', 'Successful!');
 
@@ -138,11 +129,9 @@ class BidController extends Controller
      */
     public function updateWon($id, Request $request)
     {
-        $this->validate($request, [
-            'won' => 'required'
-        ]);
-
-        $this->bid->updateWon($id, $request);
+        $this->bidRepository
+            ->validateForUpdatingWonValue($request)
+            ->updateWon($id, $request->all());
 
         \Session::flash('flash_message', 'Successful!');
 
@@ -157,7 +146,7 @@ class BidController extends Controller
      */
     public function destroy($id)
     {
-        $this->bid->destroy($id);
+        $this->bidRepository->destroy($id);
 
         \Session::flash('flash_message', 'Bid successfully deleted!');
 
@@ -171,6 +160,17 @@ class BidController extends Controller
      */
     public function getData()
     {
-        return $this->ubids->getDataTable();
+        return $this->userBidsRepository->getDataTable();
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        //
     }
 }

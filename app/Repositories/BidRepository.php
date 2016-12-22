@@ -5,8 +5,11 @@ namespace App\Repositories;
 use App\Bid;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class BidRepository implements BidRepositoryInterface {
+
+    use ValidatesRequests;
 
     private $bid;
 
@@ -14,23 +17,22 @@ class BidRepository implements BidRepositoryInterface {
         $this->bid = $bid;
     }
 
-
-    public function store(Request $request)
+    public function store(array $data)
     {
         $uid = auth()->user()->id;
         $tz = auth()->user()->timezone;
-        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $tz)->setTimezone('UTC');
+        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $data['datetime'], $tz)->setTimezone('UTC');
 
         return Bid::create([
             'user_id' => $uid,
-            'name' => $request->get('name'),
-            'url' => $request->get('url'),
+            'name' => $data['name'],
+            'url' => $data['url'],
             'datetime' => $datetime,
-            'location' => $request->get('location'),
-            'pickup' => $request->get('pickup'),
-            'notes' => $request->get('notes'),
-            'cur_bid' => $request->get('cur_bid'),
-            'max_bid' => $request->get('max_bid')
+            'location' => $data['location'],
+            'pickup' => $data['pickup'],
+            'notes' => $data['notes'],
+            'cur_bid' => $data['cur_bid'],
+            'max_bid' => $data['max_bid']
         ]);
     }
 
@@ -39,35 +41,72 @@ class BidRepository implements BidRepositoryInterface {
         return Bid::findOrFail($id);
     }
 
-    public function update($id, Request $request)
+    public function update($id, array $data)
     {
         $timezone = auth()->user()->timezone;
-        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $timezone)->setTimezone('UTC');
+        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $data['datetime'], $timezone)->setTimezone('UTC');
 
         $bid = $this->findOrFail($id);
 
         return $bid->fill([
-            'name' => $request->get('name'),
-            'url' => $request->get('url'),
+            'name' => $data['name'],
+            'url' => $data['url'],
             'datetime' => $datetime,
-            'location' => $request->get('location'),
-            'pickup' => $request->get('pickup'),
-            'notes' => $request->get('notes'),
-            'cur_bid' => $request->get('cur_bid'),
-            'max_bid' => $request->get('max_bid')
+            'location' => $data['location'],
+            'pickup' => $data['pickup'],
+            'notes' => $data['notes'],
+            'cur_bid' => $data['cur_bid'],
+            'max_bid' => $data['max_bid']
         ])->save();
     }
 
-    public function updateWon($id, Request $request)
+    public function updateWon($id, array $data)
     {
         $bid = $this->findOrFail($id);
-        $input = $request->all();
-        return $bid->fill($input)->save();
+        return $bid->fill($data)->save();
     }
 
     public function destroy($id)
     {
         $bid = $this->findOrFail($id);
         $bid->delete();
+    }
+
+    public function validateForCreate(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'url' => 'required',
+            'datetime' => 'required',
+            'location' => 'required',
+            'pickup' => 'required',
+            'cur_bid' => 'required'
+        ]);
+
+        return $this;
+    }
+
+    public function validateForUpdate(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'url' => 'required',
+            'datetime' => 'required',
+            'location' => 'required',
+            'pickup' => 'required',
+            'cur_bid' => 'required',
+            'max_bid' => 'required'
+        ]);
+
+        return $this;
+    }
+
+    public function validateForUpdatingWonValue(Request $request)
+    {
+        $this->validate($request, [
+            'won' => 'required'
+        ]);
+
+        return $this;
     }
 }

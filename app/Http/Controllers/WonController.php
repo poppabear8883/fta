@@ -9,7 +9,7 @@ use App\Repositories\UserBidsRepositoryInterface;
 
 class WonController extends Controller
 {
-    private $ubids;
+    private $userBidsRepository;
 
     /**
      * Create a new controller instance.
@@ -18,7 +18,7 @@ class WonController extends Controller
      */
     public function __construct(UserBidsRepositoryInterface $ubids)
     {
-        $this->ubids = $ubids;
+        $this->userBidsRepository = $ubids;
         $this->middleware('auth');
     }
 
@@ -29,7 +29,7 @@ class WonController extends Controller
      */
     public function index()
     {
-        $active = $this->ubids->getActiveCount();
+        $active = $this->userBidsRepository->getActiveCount();
         return view('pages.won',['active' => $active]);
     }
 
@@ -40,6 +40,6 @@ class WonController extends Controller
      */
     public function getData()
     {
-        return $this->ubids->getWonDataTable();
+        return $this->userBidsRepository->getWonDataTable();
     }
 }
