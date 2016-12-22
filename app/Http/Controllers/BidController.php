@@ -2,26 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Bid;
+use App\Repositories\BidFtaHtmlRepositoryInterface;
 use App\Repositories\BidRepositoryInterface;
-use Carbon\Carbon;
+use App\Repositories\UserBidsRepositoryInterface;
 use Illuminate\Http\Request;
 
 class BidController extends Controller
 {
 
-    private $repo;
+    private $bid;
+
+    private $ubids;
 
     private $html;
+
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(BidRepositoryInterface $repo)
+    public function __construct(BidRepositoryInterface $bid, UserBidsRepositoryInterface $ubids, BidFtaHtmlRepositoryInterface $html)
     {
-        $this->repo = $repo;
+        $this->bid = $bid;
+        $this->ubids = $ubids;
+        $this->html = $html;
         $this->middleware('auth');
     }
 
@@ -45,31 +50,14 @@ class BidController extends Controller
         return view('pages.new');
     }
 
-    public function createPost(Request $request) {
+    public function createFromHtml(Request $request) {
         $this->validate($request, [
             'itemUrl' => 'required|url'
         ]);
 
-        $url = $request->get('itemUrl');
-        $html = $this->repo->Htmldom($url);
+        $data = $this->html->remote_data($request->get('itemUrl'), auth()->user()->timezone);
 
-        $data = $html->getRemoteData();
-        $name = '';
-        if(array_has($data, ['Description']))
-        {
-            preg_match('/^(?>\S+\s*){1,6}/', $data['Description'], $match);
-            $name = $match[0];
-        }
-
-        return view('pages.new', [
-            'data' => $data,
-            'url' => $url,
-            'cbid' => $html->getRemoteCurBid(),
-            'edate' => $html->getRemoteEndDate(),
-            'loc' => $html->getRemoteLocation(),
-            'name' => $name,
-            'notes' => $html->getRemoteDetails()
-        ]);
+        return view('pages.new', $data);
     }
 
     /**
@@ -79,10 +67,6 @@ class BidController extends Controller
      */
     public function store(Request $request)
     {
-        $uid = auth()->user()->id;
-        $timezone = auth()->user()->timezone;
-        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $timezone)->setTimezone('UTC');
-
         $this->validate($request, [
             'name' => 'required',
             'url' => 'required',
@@ -92,21 +76,11 @@ class BidController extends Controller
             'cur_bid' => 'required'
         ]);
 
-        Bid::create([
-            'user_id' => $uid,
-            'name' => $request->get('name'),
-            'url' => $request->get('url'),
-            'datetime' => $datetime,
-            'location' => $request->get('location'),
-            'pickup' => $request->get('pickup'),
-            'notes' => $request->get('notes'),
-            'cur_bid' => $request->get('cur_bid'),
-            'max_bid' => $request->get('max_bid')
-        ]);
+        $this->bid->store($request);
 
         \Session::flash('flash_message', 'Bid successfully added!');
 
-        return redirect()->back();
+        return redirect('bids.index');
     }
 
     /**
@@ -128,9 +102,7 @@ class BidController extends Controller
      */
     public function edit($id)
     {
-        $bid = Bid::findOrFail($id);
-
-        return view('pages.edit')->withBid($bid);
+        return view('pages.edit')->withBid($this->bid->findOrFail($id));
     }
 
     /**
@@ -141,11 +113,6 @@ class BidController extends Controller
      */
     public function update($id, Request $request)
     {
-        $timezone = auth()->user()->timezone;
-        $datetime = Carbon::createFromFormat('Y-m-d H:i:s', $request->get('datetime'), $timezone)->setTimezone('UTC');
-
-        $bid = Bid::findOrFail($id);
-
         $this->validate($request, [
             'name' => 'required',
             'url' => 'required',
@@ -156,43 +123,30 @@ class BidController extends Controller
             'max_bid' => 'required'
         ]);
 
-        $bid->fill([
-            'name' => $request->get('name'),
-            'url' => $request->get('url'),
-            'datetime' => $datetime,
-            'location' => $request->get('location'),
-            'pickup' => $request->get('pickup'),
-            'notes' => $request->get('notes'),
-            'cur_bid' => $request->get('cur_bid'),
-            'max_bid' => $request->get('max_bid')
-        ])->save();
+        $this->bid->update($id, $request);
 
         \Session::flash('flash_message', 'Successful!');
 
-        return redirect()->back();
+        return redirect('bids.index');
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the `won` column for the resource.
      *
      * @param  int  $id
      * @return Response
      */
     public function updateWon($id, Request $request)
     {
-        $bid = Bid::findOrFail($id);
-
         $this->validate($request, [
             'won' => 'required'
         ]);
 
-        $input = $request->all();
-
-        $bid->fill($input)->save();
+        $this->bid->updateWon($id, $request);
 
         \Session::flash('flash_message', 'Successful!');
 
-        return redirect()->back();
+        return redirect('bids.index');
     }
 
     /**
@@ -203,13 +157,11 @@ class BidController extends Controller
      */
     public function destroy($id)
     {
-        $bid = Bid::findOrFail($id);
-
-        $bid->delete();
+        $this->bid->destroy($id);
 
         \Session::flash('flash_message', 'Bid successfully deleted!');
 
-        return redirect()->back();
+        return redirect('bids.index');
     }
 
     /**
@@ -219,6 +171,6 @@ class BidController extends Controller
      */
     public function getData()
     {
-        return $this->repo->getDataTable();
+        return $this->ubids->getDataTable();
     }
 }

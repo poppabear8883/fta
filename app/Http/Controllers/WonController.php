@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 use Yajra\Datatables\Datatables;
 use App\Bid;
 
-use App\Repositories\BidRepositoryInterface;
+use App\Repositories\UserBidsRepositoryInterface;
 
 class WonController extends Controller
 {
-    private $repo;
+    private $ubids;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(BidRepositoryInterface $repo)
+    public function __construct(UserBidsRepositoryInterface $ubids)
     {
-        $this->repo = $repo;
+        $this->ubids = $ubids;
         $this->middleware('auth');
     }
 
@@ -29,7 +29,7 @@ class WonController extends Controller
      */
     public function index()
     {
-        $active = $this->repo->getActiveCount();
+        $active = $this->ubids->getActiveCount();
         return view('pages.won',['active' => $active]);
     }
 
@@ -40,6 +40,6 @@ class WonController extends Controller
      */
     public function getData()
     {
-        return $this->repo->getWonDataTable();
+        return $this->ubids->getWonDataTable();
     }
 }

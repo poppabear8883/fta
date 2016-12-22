@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\QuickEmail;
-use App\Repositories\BidRepositoryInterface;
+use App\Repositories\UserBidsRepositoryInterface;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     /**
      * Bid Repository Dependency
-     * @var BidRepositoryInterface
+     * @var UserBidsRepositoryInterface
      */
     private $bid;
 
@@ -21,7 +21,7 @@ class DashboardController extends Controller
      *
      * @return void
      */
-    public function __construct(BidRepositoryInterface $bid)
+    public function __construct(UserBidsRepositoryInterface $bid)
     {
         $this->bid = $bid;
         $this->middleware('auth')->except('index');

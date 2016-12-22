@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\BidRepositoryInterface;
+use App\Repositories\UserBidsRepositoryInterface;
 
 class HomeController extends Controller
 {
@@ -14,7 +14,7 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct(BidRepositoryInterface $repo)
+    public function __construct(UserBidsRepositoryInterface $repo)
     {
         $this->repo = $repo;
         $this->middleware('auth');

@@ -2,19 +2,12 @@
 
 namespace App\Repositories;
 
+use Illuminate\Http\Request;
+
 interface BidRepositoryInterface {
-    public function getRecentlyWon();
-    public function getWonCount();
-    public function getActiveCount();
-    public function getMaxBidsAmount();
-    public function getCurBidsAmount();
-    public function getWonAmount();
-    public function getDataTable();
-    public function getWonDataTable();
-    public function Htmldom($url);
-    public function getRemoteCurBid();
-    public function getRemoteData();
-    public function getRemoteDetails();
-    public function getRemoteEndDate();
-    public function getRemoteLocation();
+    public function findOrFail($id);
+    public function store(Request $request);
+    public function update($id, Request $request);
+    public function destroy($id);
+    public function updateWon($id, Request $request);
 }
