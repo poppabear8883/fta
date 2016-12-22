@@ -9,12 +9,6 @@ class UserRepository implements UserRepositoryInterface {
 
     use NotifiesUsers;
 
-    private $userRepository;
-
-    public function __construct(UserRepositoryInterface $user) {
-        $this->userRepository = $user;
-    }
-
     public function findOrFail($id)
     {
         return User::findOrFail($id);
