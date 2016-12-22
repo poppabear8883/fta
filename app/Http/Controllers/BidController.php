@@ -6,6 +6,7 @@ use App\Repositories\BidFtaHtmlRepositoryInterface;
 use App\Repositories\BidRepositoryInterface;
 use App\Repositories\UserBidsRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class BidController extends Controller
 {
@@ -48,7 +49,7 @@ class BidController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
     public function index()
     {
@@ -58,7 +59,7 @@ class BidController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
     public function create()
     {
@@ -69,7 +70,7 @@ class BidController extends Controller
      * Passes remote data from repository to create form
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
     public function createFromHtml(Request $request)
     {
@@ -80,7 +81,7 @@ class BidController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @return Redirect
      */
     public function store(Request $request)
     {
@@ -90,14 +91,14 @@ class BidController extends Controller
 
         \Session::flash('flash_message', 'Bid successfully added!');
 
-        return redirect('bids.index');
+        return redirect('bids');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return View
      */
     public function edit($id)
     {
@@ -108,7 +109,7 @@ class BidController extends Controller
      * Update the specified resource in storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return Redirect
      */
     public function update($id, Request $request)
     {
@@ -118,14 +119,14 @@ class BidController extends Controller
 
         \Session::flash('flash_message', 'Successful!');
 
-        return redirect('bids.index');
+        return redirect('bids');
     }
 
     /**
      * Update the `won` column for the resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return Redirect
      */
     public function updateWon($id, Request $request)
     {
@@ -135,14 +136,14 @@ class BidController extends Controller
 
         \Session::flash('flash_message', 'Successful!');
 
-        return redirect('bids.index');
+        return redirect('bids');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return Response
+     * @return Redirect
      */
     public function destroy($id)
     {
@@ -150,7 +151,7 @@ class BidController extends Controller
 
         \Session::flash('flash_message', 'Bid successfully deleted!');
 
-        return redirect('bids.index');
+        return redirect('bids');
     }
 
     /**
@@ -167,7 +168,7 @@ class BidController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return Response
+     * @return null
      */
     public function show($id)
     {

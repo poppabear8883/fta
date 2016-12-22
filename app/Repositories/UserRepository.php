@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Traits\NotifiesUsers;
 use App\User;
-use Illuminate\Http\Request;
 
 class UserRepository implements UserRepositoryInterface {
 

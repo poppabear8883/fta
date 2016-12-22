@@ -48,5 +48,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Repositories\BidFtaHtmlRepositoryInterface',
             'App\Repositories\BidFtaHtmlRepository'
         );
+
+        $this->app->bind(
+            'App\Repositories\UserRepositoryInterface',
+            'App\Repositories\UserRepository'
+        );
     }
 }
