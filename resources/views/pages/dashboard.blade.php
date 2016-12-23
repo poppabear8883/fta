@@ -4,7 +4,7 @@
 @endsection
 
 @section('page_header_description')
-    Shows statistics and has widget for quickly accessing most used areas!
+    Shows statistics and has widgets for quickly accessing most used areas!
 @endsection
 @section('content')
     <div class="row">
