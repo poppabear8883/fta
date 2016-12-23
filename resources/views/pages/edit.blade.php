@@ -31,6 +31,24 @@
                 format: 'Y-m-d H:i:s',
                 formatTime: 'H:i'
             });
+
+            $('input').each(function() {
+                var el = $(this);
+                var attrName = el.attr('name');
+
+                if(attrName && attrName != 'notes' && attrName != '_token') {
+                    if(el.val() != '') {
+                        el.closest('.form-group').addClass('has-success')
+
+                    } else {
+                        el.closest('.form-group').addClass('has-error');
+                    }
+                }
+
+                if(attrName == 'datetime' || attrName == 'url') {
+                    el.attr('readonly', true);
+                }
+            });
         });
     </script>
 @endpush

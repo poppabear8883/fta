@@ -130,15 +130,6 @@
                     "render": function (data, type, row, meta) {
                         return new moment(data).format('lll');
                     }
-                },
-                {
-                    "targets": 3,
-                    "render": function (data, type, row, meta) {
-
-                        var itemUrl = row['url'];
-                        if (data.length > 20) data = data.substring(0, 20) + ' ...';
-                        return '<a href="' + itemUrl + '" target="_blank">' + data + '</a>';
-                    }
                 }
             ],
             "columns": [{

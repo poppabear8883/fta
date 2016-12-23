@@ -134,7 +134,7 @@ class BidFtaHtmlRepository implements BidFtaHtmlRepositoryInterface {
     public function Name() {
         if(array_has($this->Data(), ['Description']))
         {
-            preg_match('/^(?>\S+\s*){1,6}/', $this->Data()['Description'], $match);
+            preg_match('/^(?>\S+\s*){1,2}/', $this->Data()['Description'], $match);
             return $match[0];
         }
 

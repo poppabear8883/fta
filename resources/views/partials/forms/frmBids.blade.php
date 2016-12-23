@@ -11,7 +11,10 @@
     <div class="col-md-6">
         <div class="form-group">
             {!! Form::label('url', 'Item URL:', ['class' => 'control-label']) !!}
-            {!! Form::text('url', (isset($url) && $url != '' ? $url : null), ['class' => 'form-control']) !!}
+            {!! Form::text('url', (isset($url) && $url != '' ? $url : null), [
+            'class' => 'form-control',
+            (isset($url) && $url != '' ? 'readonly' : '')
+            ]) !!}
         </div>
         <div class="form-group">
             {!! Form::label('location', 'Location:', ['class' => 'control-label']) !!}
@@ -19,7 +22,11 @@
         </div>
         <div class="form-group">
             {!! Form::label('datetime', 'Ends:', ['class' => 'control-label']) !!}
-            {!! Form::text('datetime', (isset($edate) && $edate != '' ? $edate : null), ['class' => 'form-control', 'id' => 'datetimepicker'])  !!}
+            {!! Form::text('datetime', (isset($edate) && $edate != '' ? $edate : null), [
+            'class' => 'form-control',
+            'id' => 'datetimepicker',
+            (isset($edate) && $edate != '' ? 'readonly' : '')
+            ])  !!}
         </div>
         <div class="form-group">
             {!! Form::label('pickup', 'Pickup Details:', ['class' => 'control-label']) !!}
@@ -30,10 +37,11 @@
         <div class="form-group">
             {!! Form::label('name', 'Name:', ['class' => 'control-label']) !!}
             {!! Form::text('name', (isset($name) && $name != '' ? $name : null), ['class' => 'form-control']) !!}
+            <span class="help-block">This field is used as a item identifier (ie: Toddler Bed)</span>
         </div>
         <div class="form-group">
             {!! Form::label('cur_bid', 'Current Bid:', ['class' => 'control-label']) !!}
-            {!! Form::text('cur_bid', (isset($cbid) && is_numeric($cbid) ? $cbid : '0.00'), ['class' => 'form-control money-input']) !!}
+            {!! Form::text('cur_bid', (isset($cbid) && is_numeric($cbid) ? $cbid : null), ['class' => 'form-control money-input']) !!}
         </div>
         <div class="form-group">
             {!! Form::label('max_bid', 'Max Bid:', ['class' => 'control-label']) !!}

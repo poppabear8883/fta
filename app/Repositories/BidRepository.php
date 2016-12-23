@@ -75,9 +75,9 @@ class BidRepository implements BidRepositoryInterface {
     public function validateForCreate(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|max:25',
             'url' => 'required',
-            'datetime' => 'required',
+            'datetime' => 'required|date',
             'location' => 'required',
             'pickup' => 'required',
             'cur_bid' => 'required'
@@ -89,9 +89,9 @@ class BidRepository implements BidRepositoryInterface {
     public function validateForUpdate(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|max:25',
             'url' => 'required',
-            'datetime' => 'required',
+            'datetime' => 'required|date',
             'location' => 'required',
             'pickup' => 'required',
             'cur_bid' => 'required',
