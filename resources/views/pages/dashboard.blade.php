@@ -55,7 +55,7 @@
                  <p>This widget shows you where you are with Current Bids vs your budget. 75% or more will turn red in color.</p>"
             >
                 <div class="inner">
-                    <h3>${{$cur_total}} <small>{{($cBudget_percentage >= 75 ? 'Warning!' : '')}}</small></h3>
+                    <h3>${{$cur_total}}</h3>
 
                     <p>{{$cBudget_percentage}}% of ${{auth()->user()->budget}}</p>
                 </div>
@@ -74,7 +74,7 @@
                  <p>This widget shows you where you are with Max Bids vs your budget. 75% or more will turn red in color.</p>"
             >
                 <div class="inner">
-                    <h3>${{$max_total}} <small>{{($mBudget_percentage >= 75 ? 'Warning!' : '')}}</small></h3>
+                    <h3>${{$max_total}}</h3>
 
                     <p>{{$mBudget_percentage}}% of ${{auth()->user()->budget}}</p>
                 </div>
