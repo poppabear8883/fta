@@ -104,7 +104,7 @@
                                     <img src="images/default-50x50.gif" alt="Product Image">
                                 </div>
                                 <div class="product-info">
-                                    <a href="{{$item->url}}" class="product-title">
+                                    <a href="{{$item->url}}" class="product-title" target="_blank">
                                         {{\Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item->datetime)->setTimezone(auth()->user()->timezone)->format('m/d/Y')}}
                                         | {{$item->location}}
                                         <span class="label label-success pull-right">${{$item->cur_bid}}</span>
